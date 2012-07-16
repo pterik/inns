@@ -1,0 +1,115 @@
+
+.h1 {
+	font-size: 170%;
+}
+
+.h2 {
+	font-size: 150%;
+	font-weight: bold;
+}
+
+.h3 {
+	font-size: 130%;
+	font-weight: bold;
+}
+
+.h4 {
+	font-size: 100%;
+	text-transform: uppercase;
+}
+
+.searchbox {
+padding: 1px;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 100%;
+width: 180px;
+}
+
+.slimsearchbox {
+padding: 1px;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 100%;
+width: 88px;
+}
+
+.searchbox2 {
+padding: 1px;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 100%;
+width: 140px;
+}
+
+.slimsearchbox2 {
+padding: 1px;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 100%;
+width: 120px;
+}
+
+.icons {
+color: #800000;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 14px;
+font-weight: bold;
+background-color: inherit;
+vertical-align: top;
+padding-top: 3px;
+}
+
+.readit {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-style: normal;
+text-align: center;
+font-size: 11px;
+font-weight: bold;
+background-color: #C00000;
+color: #FFFFFF;
+border: 1px inset #FF4040;
+padding: 1px;
+cursor: pointer;
+}
+
+.listbkgr {
+background-color: #F5F5F5;
+line-height: 15px;
+padding: 0px;
+width: 100%;
+}
+
+.listtableborder {
+width: 100%;
+border: 1px solid #1A2B48;
+padding: 2px;
+}
+
+
+.ontab {
+border:1px solid #585858;
+font-family: Verdana,Helvetica,Arial,sans-serif;
+font-size: 11px;
+color: #000000;
+font-weight: bold;
+background-color: #B7B9C5;
+padding: 4px;
+}
+
+.offtab {
+border:1px solid #585858;
+font-family: Verdana,Helvetica,Arial,sans-serif;
+font-size: 11px;
+color: #000000;
+background-color: #DEE0E4;
+padding: 4px;
+cursor: pointer;
+}
+
+
+.pagetext {
+border:1px solid #585858;
+display: none;
+position: relative;
+top: 0;
+background-color: inherit;
+color: #000000;
+}
+

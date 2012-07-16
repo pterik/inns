@@ -1,0 +1,52 @@
+#jea-edit table th {
+	background:#6779aa;
+	color:#fff;
+	text-align:left;
+	padding-left:4px;
+}
+
+#jea-edit td.spacer_bottom {
+	padding-bottom:10px;
+}
+
+#jea-edit table td {
+	vertical-align : top;
+}
+
+#jea-edit td.label{
+	text-align : right;
+}
+
+label.advantage{
+	display:block;
+	width:150px;
+	margin-right:10px;
+	float:left;
+}
+
+.numberbox{
+	text-align:right;
+	padding-right:2px;
+}
+
+.icon-48-jea {
+	background-image:url(../images/header/icon-48-jea.png);
+}
+
+.icon-32-export {
+	background: url(../images/export.png);
+}
+
+.icon-32-import {
+	background: url(../images/import.png);
+}
+
+div.file_reader{
+	width :700px;
+	height :300px;
+	overflow: auto;
+	border: 1px solid #ccc;
+	margin: auto;
+	padding: 10px;
+}
+
