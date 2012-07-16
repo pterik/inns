@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="system">
+	<name>System - TinCaptcha</name>
+	
+	<author>VietNQ [aFeLiOn], Sylvain Philip</author>
+	<creationDate>2008-05-08</creationDate>
+	<copyright>(C) 2008 VietNQ, (C) 2010 Sylvain Philip</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>v@s.vnn.vn, contat@sphilip.com</authorEmail>
+	<authorUrl>http://www.sphilip.com/</authorUrl>
+	<version>0.3</version>
+	<description>Provides a captcha image and checks to ensure it is valid.</description>
+
+	<files>
+		<filename plugin="tincaptcha">tincaptcha.php</filename>
+		<folder>tincaptcha</folder>
+	</files>
+	
+	<languages folder="language">
+		<language tag="en-GB">en-GB.plg_tincaptcha.ini</language>
+		<language tag="fr-FR">fr-FR.plg_tincaptcha.ini</language>
+		<language tag="vi-VN">vi-VN.plg_tincaptcha.ini</language>
+	</languages>
+
+	<params>
+		<param name="length" type="text" default="4" label="Word Length" description="WORD_LENTH_DESCR"/>
+		<param name="size" type="text" default="20" label="Font Size" description="FONT_SIZE_DESCR"/>
+		
+		<param name="txtcolor" type="text" default="" label="Text Color" description="TEXT_COLOR_DESCR"/>
+		<param name="bgcolor" type="text" default="" label="Background Color" description="BACKGROUND_COLOR_DESCR"/>
+	</params>
+	
+</install>
+
