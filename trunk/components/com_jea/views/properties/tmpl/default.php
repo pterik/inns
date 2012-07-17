@@ -75,7 +75,6 @@ $document->addScriptDeclaration($script);
 			<?php else : echo $this->escape($row->title) ?>
 			<?php endif ?>
 			</strong> 
-			( <?php echo JText::_('Ref' ) . ' : ' . $row->ref ?> )
 			</a>
 			<?php if ( $this->params->get('show_creation_date', 0) ) : ?>
 			<span class="date"><?php echo JHTML::_('date',  $row->date_insert, JText::_('DATE_FORMAT_LC3') ); ?></span>
@@ -102,26 +101,24 @@ $document->addScriptDeclaration($script);
 			
 		</span>
 		<?php endif ?>
-			
-		<?php echo $this->cat == 'renting' ? JText::_('Renting price') :  JText::_('Selling price') ?> : 
-		<strong> <?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?></strong>
+		<?php if (($row->town !="") && ($row->adress !="")) echo JText::_('Adress')." : <strong>".$this->escape($row->town).", ".$this->escape($row->adress)."</strong><br /> \n"?>   
+		<?php if ($row->rooms !="") echo JText::_('Number of rooms')." : <strong>".$this->escape($row->rooms)."</strong><br /> \n"?>   
+		<?php echo JText::_('Renting price daily') ?> : 
+		<strong> 
+		<?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?>
+		</strong>
 		<br />
-		
+		<?php if ($row->price_monthly) {
+			echo JText::_('Renting price monthly')." : <strong> "
+			.$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 
+			echo "<br />";
+		}?>
 		<?php 
 		if ($row->living_space) {
 		    echo  JText::_('Living space') . ' : <strong>' . $row->living_space . ' ' 
 		    	  . $this->params->get('surface_measure') . '</strong>' .PHP_EOL ;
+				echo "<br />";
 		}?>
-		<br />
-
-		<?php
-		if ($row->land_space) {
-		    echo  JText::_('Land space') . ' : <strong>' . $row->land_space  .' '
-		          . $this->params->get('surface_measure'). '</strong>' .PHP_EOL ;
-		}		
-		
-		?>
-		
 		<?php if ( $row->advantages ) : ?>
 		    <br /><strong><?php echo JText::_('Advantages') ?> : </strong>
 		    <?php echo $this->getAdvantages( $row->advantages )?>

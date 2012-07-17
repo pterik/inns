@@ -26,6 +26,7 @@ class TableProperties extends JTable
     var $type_id=null;
 	var $is_renting = null;
 	var $price=null;
+	var $price_monthly=null;
 	var $adress =null;
 	var $town_id=null;
 	var $area_id =null;
