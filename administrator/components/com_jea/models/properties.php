@@ -126,7 +126,7 @@ class JeaModelProperties extends JModel
         $order         = $this->_db->getEscaped($mainframe->getUserStateFromRequest( $context.'order', 'filter_order', 'id', 'cmd'));
         $order_dir     = $this->_db->getEscaped($mainframe->getUserStateFromRequest( $context.'order_dir', 'filter_order_Dir', 'desc', 'cmd'));
 
-        $select = 'SELECT tp.id AS `id`, tp.ref AS `ref`, tp.adress AS `adress`, tp.price AS `price`,' . PHP_EOL
+        $select = 'SELECT tp.id AS `id`, tp.ref AS `ref`, tp.adress AS `adress`, tp.price AS `price`, tp.price_monthly AS `price_monthly`,' . PHP_EOL
          		. 'tp.date_insert AS `date_insert`,tp.emphasis AS `emphasis`, td.value AS `department`,'. PHP_EOL
          		. 'tt.value AS `type`, tto.value AS `town`, tp.published AS published, tp.ordering AS `ordering`,' . PHP_EOL
          		. 'tp.checked_out AS `checked_out`, tp.checked_out_time AS `checked_out_time`,' . PHP_EOL
@@ -265,6 +265,7 @@ class JeaModelProperties extends JModel
         	'alias'          => JRequest::getVar( 'alias', '', 'POST' ),
 			'type_id'        => JRequest::getInt( 'type_id', 0 , 'POST' ),
 			'price'          => JRequest::getFloat( 'price', 0.0, 'POST' ),
+			'price_monthly'  => JRequest::getFloat( 'price_monthly', 0.0, 'POST' ),
 			'adress'         => JRequest::getVar( 'adress' , '', 'POST' ),
 			'town_id'        => JRequest::getInt( 'town_id', 0 , 'POST' ),
 			'area_id'        => JRequest::getInt( 'area_id', 0 , 'POST' ),

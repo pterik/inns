@@ -81,7 +81,7 @@ JPluginHelper::importPlugin( 'jea' );
  
   <table>
     <tr>
-      <td><?php echo $this->row->is_renting ?  JText::_('Renting price') : JText::_('Selling price') ?></td>
+      <td><?php echo $this->row->is_renting ?  JText::_('Renting price daily') : JText::_('Selling price') ?></td>
     
       <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price) , JText::_('Consult us') ) ?></strong></td>
    </tr>
@@ -186,11 +186,10 @@ JPluginHelper::importPlugin( 'jea' );
 		<p><label for="email"><?php echo JText::_('Email') ?> :</label><br />
 		   <input type="text" name="email" id="email" value="<?php echo $this->escape(JRequest::getVar('email', '')) ?>" size="40" />
 		</p>
-		
+		<?php  ?>
 		<p><label for="subject"><?php echo JText::_('Subject') ?> :</label><br />
-		   <input type="text" name="subject" id="subject" value="Ref : <?php echo $this->escape( $this->row->ref ) ?>" size="40" />
+		   <input type="text" name="subject" id="subject" value="<?php echo JText::_('REF').':'.$this->escape( $this->row->ref ) ?>" size="40" />
 		</p>
-		
 		<p><label for="e_message"><?php echo JText::_('Message') ?> :</label><br /> 
 		   <textarea name="e_message" id="e_message" rows="10" cols="40"><?php echo $this->escape(JRequest::getVar('e_message', '')) ?></textarea>
 		</p>
