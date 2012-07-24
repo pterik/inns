@@ -70,9 +70,8 @@ $document->addScriptDeclaration($script);
 		<dt class="title" >
 			<a href="<?php echo $this->getViewUrl ( $row->slug ) ?>" title="<?php echo JText::_('Show detail') ?>" > 
 			<strong> 
-			<?php if(empty($row->title)):?>
-			<?php echo ucfirst( JText::sprintf('PROPERTY TYPE IN TOWN', $this->escape($row->type), $this->escape($row->town) ) ) ?>
-			<?php else : echo $this->escape($row->title) ?>
+			<?php if (($row->town !="") || ($row->adress !="")) : echo $this->escape($row->town).", ".$this->escape($row->adress)."\n"?>   
+			<?php else : echo $this->escape($row->type) ?>
 			<?php endif ?>
 			</strong> 
 			</a>
@@ -101,18 +100,20 @@ $document->addScriptDeclaration($script);
 			
 		</span>
 		<?php endif ?>
-		<?php if (($row->town !="") && ($row->adress !="")) echo JText::_('Adress')." : <strong>".$this->escape($row->town).", ".$this->escape($row->adress)."</strong><br /> \n"?>   
-		<?php if ($row->rooms !="") echo JText::_('Number of rooms')." : <strong>".$this->escape($row->rooms)."</strong><br /> \n"?>   
-		<?php echo JText::_('Renting price daily') ?> : 
+		<?php if ($row->type !="") echo "<strong>".$this->escape($row->type)."</strong><br /> \n"?>
+		<?php echo JText::_('Renting price short daily') ?> 
 		<strong> 
 		<?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?>
 		</strong>
-		<br />
-		<?php if ($row->price_monthly) {
-			echo JText::_('Renting price monthly')." : <strong> "
-			.$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 
-			echo "<br />";
+		<?php if (($row->price_monthly)&&(floatval($row->price_monthly)!='0')) {
+			echo JText::_('Renting price short monthly')." <strong> ".$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 
 		}?>
+		<br />
+		<?php if ($row->phone_main) {
+			echo JText::_('PHONE MAIN')." : <strong> "
+			.$this->escape($row->phone_main)."</strong><br />";
+		}?>
+
 		<?php 
 		if ($row->living_space) {
 		    echo  JText::_('Living space') . ' : <strong>' . $row->living_space . ' ' 
