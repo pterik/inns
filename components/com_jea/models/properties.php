@@ -394,7 +394,8 @@ class JeaModelProperties extends JModel
         $select = implode(', ', $temp );
 
         $select .= ', td.value AS `department`, tc.value AS `condition`, ta.value AS `area`, '. PHP_EOL
-			    .  ' concat(tow.telephone1, tow.telephone2, tow.telephone3, tag.tel_separator, tag.telephone1, tag.telephone2, tag.telephone3) AS `phones`, '. PHP_EOL 
+			    .  'concat(tow.telephone1, tow.telephone2, tow.telephone3) AS `phones_owner`, '. PHP_EOL 
+			    .  'concat(tag.telephone1, tag.telephone2, tag.telephone3) AS `phones_agent`, '. PHP_EOL 
 			    .  'case when length(tow.telephone1)>0 then tow.telephone1 else tag.telephone1 end as `phone_main`, '. PHP_EOL 
 			    .  'ts.value AS `slogan`, tt.value AS `type`, tto.value AS `town`, '. PHP_EOL 
 				.  'thwt.value AS `hot_water`, tht.value AS `heating`'. PHP_EOL;
