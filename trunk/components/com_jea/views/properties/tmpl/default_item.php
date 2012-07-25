@@ -40,8 +40,12 @@ JPluginHelper::importPlugin( 'jea' );
 	</div>
 <?php endif ?>
 
-<h1> <?php echo $this->page_title ?> </h1>
-
+<h1>
+<?php if (($this->row->town !="") || ($this->row->adress !="")) : echo $this->escape($this->row->town).", ".$this->escape($this->row->adress)."\n"?>   
+<?php else : echo $this->escape($this->row->type) ?>
+<?php endif ?>
+ <?php $this->page_title ?> 
+</h1>
 <?php if ( $this->params->get('show_creation_date', 0) ) : ?>
     <p><span class="date">
     <?php echo JHTML::_('date',  $this->row->date_insert, JText::_('DATE_FORMAT_LC3') ); ?></span></p>
@@ -76,14 +80,15 @@ JPluginHelper::importPlugin( 'jea' );
     
 
    	<?php if (intval($this->row->availability)): ?>
-   	<p><em><?php echo JText::_('Availability date') ?> : <?php echo $this->row->availability ?></em> </p>
+   	<p><em><?php echo JText::_('Availability date') ?> : <?php echo JHTML::_('date',  $this->row->availability, JText::_('DATE_FORMAT_LC3') ) ?></em> </p>
    	<?php endif  ?>
  
   <table>
     <tr>
-      <td><?php echo $this->row->is_renting ?  JText::_('Renting price daily') : JText::_('Selling price') ?></td>
-    
-      <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price) , JText::_('Consult us') ) ?></strong></td>
+      <td><?php echo JText::_('Renting price daily')?></td>
+      <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price) , JText::_('NOT PRESENT') ) ?></strong></td>
+      <td><?php echo JText::_('Renting price monthly')?></td>
+      <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price_monthly) , JText::_('NOT PRESENT') ) ?></strong></td>
    </tr>
       
    <!---
@@ -112,7 +117,7 @@ JPluginHelper::importPlugin( 'jea' );
   
   <h3><?php echo JText::_('Description') ?> :</h3>
       <?php if ($this->row->condition): ?>
-     <p><strong><?php echo ucfirst($this->escape($this->row->condition)) ?></strong></p>
+     <p> <?php echo JText::_('GENERAL CONDITION') ?> : <strong><?php echo ucfirst($this->escape($this->row->condition)) ?></strong></p>
       <?php endif  ?>
       
      <p>
@@ -144,8 +149,7 @@ JPluginHelper::importPlugin( 'jea' );
         
         <?php if ($this->row->toilets): ?>
         <?php echo JText::_('Number of toilets') ?> : <strong><?php echo $this->row->toilets ?></strong>
-        <?php endif  ?>
-        
+		<?php endif ?>
     </p>
 
     <p>
@@ -165,7 +169,21 @@ JPluginHelper::importPlugin( 'jea' );
           
  <div class="item_description" > 
  <?php echo $this->row->description ?> 
- </div>
+ <br />
+ <?php if ($this->row->phones_owner): ?>
+ <?php echo JText::_('PHONES OWNER')." : "?> 
+ <strong>
+ <?php echo $this->row->phones_owner ?> 
+ <?php endif ?>
+ </strong>
+ <br />
+ <?php if ($this->row->phones_agent): ?>
+ <?php echo JText::_('PHONES AGENT')." : " ?> 
+ <strong>
+ <?php echo $this->row->phones_agent ?> 
+ <?php endif ?>
+ </strong>
+  </div>
  
 <?php $dispatcher->trigger('onAfterShowDescription', array(&$this->row)) ?>
 
@@ -188,7 +206,7 @@ JPluginHelper::importPlugin( 'jea' );
 		</p>
 		<?php  ?>
 		<p><label for="subject"><?php echo JText::_('Subject') ?> :</label><br />
-		   <input type="text" name="subject" id="subject" value="<?php echo JText::_('REF').':'.$this->escape( $this->row->ref ) ?>" size="40" />
+		   <input type="text" name="subject" id="subject" value="<?php echo JText::_('REF').' '.$this->escape( $this->row->ref ) ?>" size="40" />
 		</p>
 		<p><label for="e_message"><?php echo JText::_('Message') ?> :</label><br /> 
 		   <textarea name="e_message" id="e_message" rows="10" cols="40"><?php echo $this->escape(JRequest::getVar('e_message', '')) ?></textarea>
