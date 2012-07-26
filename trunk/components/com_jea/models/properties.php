@@ -186,7 +186,7 @@ class JeaModelProperties extends JModel
 		
 		$sql = $select . $where .  ' ORDER BY ' . $order . ' ' . strtoupper( $order_dir ) ;
 		
-		dump($sql);
+		//dump($sql);
         $rows = $this->_getList( $sql , $limitstart, $limit );
 
         if ( !$this->_db->getErrorNum() ) {

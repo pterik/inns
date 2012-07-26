@@ -40,11 +40,11 @@ JPluginHelper::importPlugin( 'jea' );
 	</div>
 <?php endif ?>
 
-<h1>
+<h1> 
 <?php if (($this->row->town !="") || ($this->row->adress !="")) : echo $this->escape($this->row->town).", ".$this->escape($this->row->adress)."\n"?>   
 <?php else : echo $this->escape($this->row->type) ?>
 <?php endif ?>
- <?php $this->page_title ?> 
+<!--<?php echo $this->page_title ?> -->
 </h1>
 <?php if ( $this->params->get('show_creation_date', 0) ) : ?>
     <p><span class="date">
@@ -58,9 +58,8 @@ JPluginHelper::importPlugin( 'jea' );
 <?php endif ?>
   
  <h2 ><?php echo JText::_('Ref')?> : <?php echo $this->escape($this->row->ref) ?></h2>
- 
- <div class="clr" >&nbsp;</div>
-  	    
+	<div class="clr" >&nbsp;</div>
+  
    <div class="item_second_column">
       <h3><?php echo JText::_('Adress') ?> :</h3>
       <strong>
@@ -115,8 +114,9 @@ JPluginHelper::importPlugin( 'jea' );
   -->
   </table>
   
-  <h3><?php echo JText::_('Description') ?> :</h3>
-      <?php if ($this->row->condition): ?>
+	<h3><?php echo JText::_('Description') ?> :</h3>
+
+  <?php if ($this->row->condition): ?>
      <p> <?php echo JText::_('GENERAL CONDITION') ?> : <strong><?php echo ucfirst($this->escape($this->row->condition)) ?></strong></p>
       <?php endif  ?>
       
@@ -162,28 +162,14 @@ JPluginHelper::importPlugin( 'jea' );
      <?php endif  ?>
      </p>
 
-     
- <div class="clr" >&nbsp;</div>
+
+<div class="clr" >&nbsp;</div>
  
 <?php $dispatcher->trigger('onBeforeShowDescription', array(&$this->row)) ?>
           
  <div class="item_description" > 
  <?php echo $this->row->description ?> 
- <br />
- <?php if ($this->row->phones_owner): ?>
- <?php echo JText::_('PHONES OWNER')." : "?> 
- <strong>
- <?php echo $this->row->phones_owner ?> 
- <?php endif ?>
- </strong>
- <br />
- <?php if ($this->row->phones_agent): ?>
- <?php echo JText::_('PHONES AGENT')." : " ?> 
- <strong>
- <?php echo $this->row->phones_agent ?> 
- <?php endif ?>
- </strong>
-  </div>
+ </div>
  
 <?php $dispatcher->trigger('onAfterShowDescription', array(&$this->row)) ?>
 

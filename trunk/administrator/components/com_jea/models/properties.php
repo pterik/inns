@@ -127,7 +127,8 @@ class JeaModelProperties extends JModel
         $order_dir     = $this->_db->getEscaped($mainframe->getUserStateFromRequest( $context.'order_dir', 'filter_order_Dir', 'desc', 'cmd'));
 
         $select = 'SELECT tp.id AS `id`, tp.ref AS `ref`, tp.adress AS `adress`, tp.price AS `price`, tp.price_monthly AS `price_monthly`,' . PHP_EOL
-				. 'concat(tow.telephone1, tow.telephone2, tow.telephone3, tag.tel_separator, tag.telephone1, tag.telephone2, tag.telephone3) AS `phones`, '. PHP_EOL 
+				. 'concat(tow.telephone1, tow.telephone2, tow.telephone3) AS `phones_owner` , '. PHP_EOL 
+				. 'concat(tag.telephone1, tag.telephone2, tag.telephone3) AS `phones_agent` , '. PHP_EOL 
 				. 'tp.date_insert AS `date_insert`,tp.emphasis AS `emphasis`, td.value AS `department`,'. PHP_EOL
          		. 'tt.value AS `type`, tto.value AS `town`, tp.published AS published, tp.ordering AS `ordering`,' . PHP_EOL
          		. 'tp.checked_out AS `checked_out`, tp.checked_out_time AS `checked_out_time`,' . PHP_EOL

@@ -106,7 +106,7 @@ $document->addScriptDeclaration($script);
 		<?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?>
 		</strong>
 		<?php if (($row->price_monthly)&&(floatval($row->price_monthly)!='0')) {
-			echo JText::_('Renting price short monthly')." <strong> ".$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 
+			echo ', '.JText::_('Renting price short monthly')." <strong> ".$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 
 		}?>
 		<br />
 		<?php if ($row->phone_main) {
@@ -120,11 +120,7 @@ $document->addScriptDeclaration($script);
 		    	  . $this->params->get('surface_measure') . '</strong>' .PHP_EOL ;
 				echo "<br />";
 		}?>
-		<?php if ( $row->advantages ) : ?>
-		    <br /><strong><?php echo JText::_('Advantages') ?> : </strong>
-		    <?php echo $this->getAdvantages( $row->advantages )?>
-		<?php endif ?>
-		
+	
 		<br />
 		<a href="<?php echo $this->getViewUrl ( $row->slug ) ?>" title="<?php echo JText::_('Show detail') ?>"> 
 		<?php echo JText::_('Detail') ?> </a>

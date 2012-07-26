@@ -118,7 +118,7 @@ function checkForm() {
         </tr>
         
         <tr>
-          <td nowrap="nowrap"><label for="title"><?php echo JText::_('Title') ?> : </label></td>
+          <td nowrap="nowrap"><label for="title"><?php echo JText::_('Title hidden') ?> : </label></td>
           <td width="100%">
             <input id="title" type="text" name="title" value="<?php echo $this->escape( $this->row->title ) ?>" class="inputbox" size="45" />
           </td>
