@@ -32,6 +32,7 @@ class TableProperties extends JTable
 	var $area_id =null;
 	var $zip_code =null;
 	var $department_id =null;
+	var $owner_id =null;
 	var $condition_id =null;
 	var $living_space = null;
 	var $land_space = null;

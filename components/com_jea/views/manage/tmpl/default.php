@@ -37,25 +37,25 @@ $altrow = 1;
 	<p class="limitbox"><em><?php echo JText::_('Results per page') ?> : </em><?php echo $this->pagination->getLimitBox() ?></p>
 <?php endif ?>
 
-	<p>
+<!--	<p>
     	<select name="cat" onchange="this.form.submit()" class="inputbox" size="1">
-    	   <option value="-1">--<?php echo JText::_('Filter') ?>--</option>
-    	   <option value="0" <?php if($this->cat == 0) echo 'selected="selected"' ?>><?php echo JText::_('Selling') ?></option>
-    	   <option value="1" <?php if($this->cat == 1) echo 'selected="selected"' ?>><?php echo JText::_('Renting') ?></option>
+			<option value="-1">--<?php echo JText::_('Filter') ?>--</option> 
+			<option value="0" <?php if($this->cat == 0) echo 'selected="selected"' ?>><?php echo JText::_('Selling') ?></option> 
+			<option value="1" <?php if($this->cat == 1) echo 'selected="selected"' ?>><?php echo JText::_('Renting') ?></option>
     	</select>
 	</p>
-	
+-->	
 <?php if (!empty($this->rows)): ?>	
 	<table class="jea_listing" >
 		<thead>
 		<tr>
 			<th class="ref"><?php echo JHTML::_('grid.sort', 'Ref', 'ref', $this->order_dir , $this->order ) ?></th>
 			<th class="type"><?php echo JHTML::_('grid.sort', 'Type', 'type', $this->order_dir , $this->order ) ?></th>
+			<th class="owner"><?php echo JText::_('Owner' ) ?></th>
+			<th class="title"><?php echo JText::_('Title' ) ?></th>
 			<th class="adress"><?php echo JText::_('Adress' )?></th>
 			<th class="town"><?php echo JHTML::_('grid.sort', 'Town', 'town', $this->order_dir , $this->order ) ?></th>
-			<th class="living_space number"><?php echo JHTML::_('grid.sort', 'Living space', 'living_space', $this->order_dir , $this->order ) ?></th>
-			<th class="land_space number"><?php echo JHTML::_('grid.sort', 'Land space', 'land_space', $this->order_dir , $this->order ) ?></th>
-			<th class="price number"><?php echo JHTML::_('grid.sort', 'renting' ? JText::_('Renting price') :  JText::_('Selling price'), 'price', $this->order_dir , $this->order ) ?></th>
+			<th class="price number"><?php echo JHTML::_('grid.sort', 'RENTING PRICE SHORT DAILY' , JText::_('RENTING PRICE SHORT DAILY') , $this->order_dir , $this->order ) ?></th>
 			<th class="published"><?php echo JText::_('Published' )?></th>
 			<th class="edit"><?php echo JText::_('Delete' )?></th>
 		</tr>
@@ -68,11 +68,11 @@ $altrow = 1;
 			<td class="ref"><a href="<?php echo JRoute::_( 'index.php?option=com_jea&view=manage&layout=form&id='.$row->slug ) ?>" title="<?php echo JText::_('Edit') ?>" > 
 			<?php echo $row->ref ?></a></td>
 			<td class="type"><?php echo $row->type ?></td>
+			<td class="owner"><?php echo $row->owner_id ?></td>
+			<td class="title"><?php echo $row->title ?></td>
 			<td class="adress"><?php echo $row->adress ?></td>
 			<td class="town"><?php echo $row->town ?></td>
-			<td class="living_space number"><?php echo $this->formatNumber( floatval( $row->living_space), 2 ) . ' ' . $this->params->get('surface_measure') ?></td>
-			<td class="land_space number"><?php echo $this->formatNumber( floatval( $row->land_space ), 2 ). ' ' . $this->params->get('surface_measure') ?></td>
-			<td class="price number"><?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?></td>
+			<td class="price number"><?php echo $this->formatPrice( floatval($row->price) , JText::_('NOT PRESENT') ) ?></td>
 			<td class="published"><?php echo $row->published ? JHTML::_('image.site', 'publish_g.png', '/administrator/images/') : JHTML::_('image.site', 'publish_r.png', '/administrator/images/') ?></td>
 			<td class="delete">
 			<a href="<?php echo JRoute::_( 'index.php?option=com_jea&task=delete&id='.$row->id ) ?>" 
