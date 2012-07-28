@@ -113,7 +113,7 @@ function checkForm() {
           <td width="100%">
             <input id="ref" type="text" name="ref" value="<?php echo $this->escape( $this->row->ref ) ?>" class="inputbox" />
            
-            <?php echo JHTML::_('select.booleanlist',  'is_renting' , 'class="inputbox"' , $this->row->is_renting, 'Renting', 'Selling' ) ; ?>
+            <!--<?php echo JHTML::_('select.booleanlist',  'is_renting' , 'class="inputbox"' , $this->row->is_renting, 'Renting', 'Selling' ) ; ?>-->
           </td>
         </tr>
         
@@ -128,6 +128,12 @@ function checkForm() {
           <td nowrap="nowrap"><label for="type_id"><?php echo JText::_('Property type') ?> :</label></td>
           <td width="100%" ><?php echo  $this->getHtmlList('types', $this->row->type_id) ?></td>
         </tr>
+        <tr>
+          <td nowrap="nowrap"><label for="zip_code"><?php echo JText::_('TOWN') ?> :</label></td>
+          <td width="100%" >
+   		  <?php echo $this->getHtmlList('towns', $this->row->town_id) ?>
+          </td>
+        </tr>
         
         <tr>
           <td nowrap="nowrap"><label for="adress"><?php echo JText::_('Adress') ?> :</label></td>
@@ -136,22 +142,6 @@ function checkForm() {
           </td>
         </tr>       
         
-        <tr>
-          <td nowrap="nowrap"><label for="zip_code"><?php echo JText::_('Zip code') ?> :</label></td>
-          <td width="100%" >
-              <input id="zip_code" type="text" name="zip_code" size="5" value="<?php echo $this->row->zip_code ?>" class="inputbox" />
-              <span style="margin-left:25px">
-              <?php echo $this->getHtmlList('departments', $this->row->department_id) ?>
-              <?php if($this->params->get('relationship_dpts_towns_area', 0)): ?>
-        		  <?php echo $this->getTownsList($this->row->town_id, $this->row->department_id) ?>
-        		  <?php echo $this->getAreasList($this->row->area_id, $this->row->town_id) ?>
-    		  <?php else :?>
-        		  <?php echo $this->getHtmlList('towns', $this->row->town_id) ?>
-        		  <?php echo $this->getHtmlList('areas', $this->row->area_id) ?>
-    		  <?php endif ?>
-              </span>
-          </td>
-        </tr>
         
         <tr>
           <td nowrap="nowrap"><?php echo JText::_('Published') ?> : </td>
@@ -167,7 +157,6 @@ function checkForm() {
                 // parameters : areaname, content, width, height, cols, rows, show buttons
                 echo $editor->display( 'description',  $this->row->description , '100%', '300', '75', '20', false ) ;
           ?>
-          
           </td>
         </tr>
       </table>
@@ -178,40 +167,39 @@ function checkForm() {
     
       <tr>
           <td nowrap="nowrap" class="label">
-            <label for="price"><?php echo  $this->row->is_renting ? JText::_('Renting price') : JText::_('Selling price') ?> :</label>
+            <label for="price"><?php echo  JText::_('Renting price daily') ?> :</label>
           </td>
           <td width="100%">
               <input id="price" type="text" name="price" value="<?php echo $this->row->price ?>" class="numberbox" /> 
               <?php echo $this->params->get('currency_symbol', '&euro;') ?> 
           </td>
       </tr>
-      
-     <tr>
-          <td nowrap="nowrap" class="label"><label for="charges"><?php echo JText::_('Charges') ?> :</label></td>
+      <tr>
+          <td nowrap="nowrap" class="label">
+            <label for="price_monthly"><?php echo  JText::_('Renting price monthly') ?> :</label>
+          </td>
           <td width="100%">
-            <input id="charges" type="text" name="charges" value="<?php echo $this->row->charges ?>" class="numberbox" /> 
-            <?php echo $this->params->get('currency_symbol', '&euro;') ?> 
+              <input id="price_monthly" type="text" name="price_monthly" value="<?php echo $this->row->price_monthly ?>" class="numberbox" /> 
+              <?php echo $this->params->get('currency_symbol', '&euro;') ?> 
           </td>
       </tr>
-        
-     <?php if ($this->row->is_renting): ?> 
-	  <tr>
+      
+	  <!-- Депозит пока не обрабатываем <tr>
 		  <td nowrap="nowrap" class="label"><label for="deposit"><?php echo JText::_('Deposit') ?> :</label></td>
 		  <td>
 		  	<input id="deposit" type="text" name="deposit" value="<?php echo $this->row->deposit ?>" class="numberbox" /> 
 		  	<?php echo $this->params->get('currency_symbol', '&euro;') ?> 
 		  </td>
 	  </tr>
-	  <?php endif ?>
-        
-      <tr>
+     -->   
+      <!-- Fee (комиссионные) пока также не обрабатываем<tr>
           <td nowrap="nowrap" class="label"><label for="fees"><?php echo JText::_('Fees') ?> :</label></td>
           <td class="spacer_bottom" >
             <input id="fees" type="text" name="fees" value="<?php echo $this->row->fees ?>" class="numberbox" /> 
             <?php echo $this->params->get('currency_symbol', '&euro;') ?> 
           </td>
       </tr> 
-        
+     -->   
       </table>   
       </fieldset>
       
@@ -234,36 +222,41 @@ function checkForm() {
           </td>
         </tr>
         
-        <tr>
+        <!-- Land space - площадь участка 
+		<tr>
           <td nowrap="nowrap" class="label"><label for="land_space"><?php echo JText::_('Land space') ?> :</label></td>
           <td width="100%">
             <input id="land_space" type="text" name="land_space" value="<?php echo $this->row->land_space ?>" class="numberbox" size="7" /> 
             <?php echo $this->params->get('surface_measure', 'M&sup2;') ?> 
           </td>
         </tr>
-        
-        <tr>
+        -->
+        <!-- Floors - этажи убираем
+		<tr>
           <td nowrap="nowrap" class="label"><label for="floor"><?php echo JText::_('Floors') ?> :</label></td>
           <td width="100%">
             <input id="floor" type="text" name="floor" value="<?php echo $this->row->floor ?>" class="numberbox" size="3" />
           </td>
         </tr>
-        
+        -->
+        <!-- Number of rooms - вместо этого тип собственности
         <tr>
           <td nowrap="nowrap" class="label"><label for="rooms"><?php echo JText::_('Number of rooms') ?> :</label></td>
           <td width="100%"><input id="rooms" type="text" name="rooms" value="<?php echo $this->row->rooms ?>" class="numberbox" size="3" /> </td>
         </tr>
-        
+		-->
+        <!-- Number of bathrooms - звучит заманчиво
         <tr>
           <td nowrap="nowrap" class="label"><label for="bathrooms"><?php echo JText::_('Number of bathrooms') ?> :</label></td>
           <td width="100%"><input id="bathrooms" type="text" name="bathrooms" value="<?php echo $this->row->bathrooms ?>" class="numberbox" size="3" /> </td>
         </tr>
-        
+        -->
+        <!-- Number of toilets - звучит не менее заманчиво
         <tr>
           <td nowrap="nowrap" class="label"><label for="toilets"><?php echo JText::_('Number of toilets') ?> :</label></td>
           <td><input id="toilets" type="text" name="toilets" value="<?php echo $this->row->toilets ?>" class="numberbox" size="3" /> </td>
         </tr>   
-                
+        -->        
         <tr>
           <td nowrap="nowrap" class="label"><label for="hot_water_type" ><?php echo JText::_('Hot water type') ?> :</label></td>
           <td width="100%"><?php echo $this->getHtmlList('hotwatertypes', $this->row->hot_water_type) ?></td>
@@ -275,13 +268,67 @@ function checkForm() {
         </tr>
     </table>
     </fieldset>
+  <fieldset>
+  <p style="margin-top:20px">
+      <input type="hidden" name="id" value="<?php echo $this->row->id ?>" />
+      <?php echo JHTML::_( 'form.token' ) ?>
+      <input type="submit" value="<?php echo JText::_('Save') ?>" />
+  </p>
+  </fieldset>
     
     <fieldset><legend><?php echo JText::_('Advantages') ?></legend>
     <?php echo $this->getAdvantagesRadioList() ?>
     </fieldset>
 
+	<fieldset><legend><?php echo JText::_('Miscellaneous informations') ?></legend>
+    <table>
+      <tr>
+          <td nowrap="nowrap"><label for="slogan_id"><?php echo JText::_('Slogan') ?> :</label></td>
+          <td width="100%"><?php echo $this->getHtmlList('slogans', $this->row->slogan_id ) ?></td>
+      </tr>
+      <tr>
+        <td><label for="availability"><?php echo JText::_('Property availability') ?> </label></td>
+        <td>
+			<input type="text" class="text_area" id="availability" name="availability" value="<?php echo $this->row->availability ?>" />
+			<input type="reset" class="button" value="..." onclick="return showCalendar('availability', '%Y-%m-%d');" />
+		</td>
+      </tr>
+    </table>
+  </fieldset>
 
-  <fieldset><legend><?php echo JText::_('Main property picture') ?></legend>
+  <fieldset>
+	<table width = 800>
+	<tr>
+		<td>
+		<legend><?php echo JText::_('Property geolocalization') ?></legend>
+		<?php echo $this->loadTemplate('geolocalization') ?>
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo JText::_('GEOLOCALIZATION COMMENT')?>
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<label class="help_geo">
+		<?php echo JText::_('GEOLOCALIZATION HELP')?>
+		</label>
+		<input type="checkbox" name="help_geo" value="0" />
+		</td>
+		<td>
+		</td>
+	</tr>
+	</table>
+  </fieldset>
+  
+  <fieldset>
+	<table width = 800>
+	<tr><td>
+	<legend><?php echo JText::_('Main property picture') ?></legend>
       <input type="file" name="main_image" value=""  size="30"/> <input class="button" type="button" value="<?php echo JText::_('Send') ?>" onclick="if (checkForm()) this.form.submit()" />
         <?php if (!empty($this->main_image)) : ?>
         <fieldset style="margin-top:10px;">
@@ -291,9 +338,12 @@ function checkForm() {
             <a href="<?php echo $this->main_image['delete_url'] ?>"><?php echo JText::_('Delete') ?></a>
         </fieldset>
         <?php endif ?>
+	</td><td></td></tr>
+	</table>
   </fieldset>
   
-  <fieldset><legend><?php echo JText::_('Secondaries property pictures') ?></legend>
+  <fieldset>
+  <legend><?php echo JText::_('Secondaries property pictures') ?></legend>
       
       <?php for($i=0; $i < $this->params->get('secondaries_img_upload_number', 3); $i++): ?>
 		      <input type="file" name="second_image[]" value=""  size="30"/> <br />
@@ -310,31 +360,18 @@ function checkForm() {
         </fieldset>
       <?php endforeach ?>
       </div>
-  </fieldset>
   
-  <fieldset><legend><?php echo JText::_('Geolocalization') ?></legend>
-    <?php echo $this->loadTemplate('geolocalization') ?>
   </fieldset>
-    
-  <fieldset><legend><?php echo JText::_('Miscellaneous informations') ?></legend>
-    <table>
-      <tr>
-          <td nowrap="nowrap"><label for="slogan_id"><?php echo JText::_('Slogan') ?> :</label></td>
-          <td width="100%"><?php echo $this->getHtmlList('slogans', $this->row->slogan_id ) ?></td>
-      </tr>
-      <tr>
-        <td><label for="availability"><?php echo JText::_('Property availability') ?> : </label></td>
-        <td><input type="text" class="text_area" id="availability" name="availability" value="<?php echo $this->row->availability ?>" />
-        <input type="reset" class="button" value="..." onclick="return showCalendar('availability', '%Y-%m-%d');" />
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-  
-  <p style="margin-top:20px">
+   <fieldset>
+   	<table width = 800>
+	<tr><td>
+	<p style="margin-top:20px">
       <input type="hidden" name="id" value="<?php echo $this->row->id ?>" />
       <?php echo JHTML::_( 'form.token' ) ?>
       <input type="submit" value="<?php echo JText::_('Save') ?>" />
-  </p>
-  
+	</p>
+  	</td><td></td></tr>
+	</table>
+  </fieldset>
+ 
 </form>
