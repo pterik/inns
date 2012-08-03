@@ -50,7 +50,6 @@ JPluginHelper::importPlugin( 'jea' );
     <p><span class="date">
     <?php echo JHTML::_('date',  $this->row->date_insert, JText::_('DATE_FORMAT_LC3') ); ?></span></p>
 <?php endif ?>
-
 <?php if(!empty($this->main_image)): ?>
 <div id="jea-gallery">
     <?php echo $this->loadTemplate($this->images_layout) ?>
@@ -58,6 +57,14 @@ JPluginHelper::importPlugin( 'jea' );
 <?php endif ?>
   
  <h2 ><?php echo JText::_('Ref')?> : <?php echo $this->escape($this->row->ref) ?></h2>
+<?php if ( $this->row->phones_owner!="" ) : ?>
+    <p><span class="telephone">
+    <?php echo JText::_('PHONES OWNER')." ".$this->row->phones_owner; ?></span></p>
+<?php endif ?>
+<?php if ( $this->row->phones_agent!="" ) : ?>
+    <p><span class="telephone">
+    <?php echo JText::_('PHONES AGENT')." ".$this->row->phones_agent; ?></span></p>
+<?php endif ?>
 	<div class="clr" >&nbsp;</div>
   
    <div class="item_second_column">
