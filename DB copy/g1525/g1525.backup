@@ -3,15 +3,15 @@
 <!-- Modifying this generated file will probably render it invalid -->
 <ExportTemplate FormatVersion="1">
   <LastSuccessfullDate>0001-01-01T00:00:00</LastSuccessfullDate>
-  <ConnectionName>root on localhost</ConnectionName>
-  <ConnectionString>User Id=root;Host=localhost;Database=g1525;Character Set=utf8;</ConnectionString>
+  <ConnectionName>g1525.localhost</ConnectionName>
+  <ConnectionString>User Id=root;Host=localhost;Database=g1525;Ping Interval=240;Character Set=AUTO;</ConnectionString>
   <Database>g1525</Database>
-  <OutputDirectory>C:\inetpub\DB copy\g1525\</OutputDirectory>
+  <OutputDirectory>c:\Program Files\Zend\Apache2\htdocs\inns\DB copy\g1525\</OutputDirectory>
   <BaseFileName>g1525</BaseFileName>
   <Mode>All</Mode>
   <AppendTimestamp>True</AppendTimestamp>
-  <MaxDays>0</MaxDays>
-  <MaxFilesCount>0</MaxFilesCount>
+  <MaxDays>10</MaxDays>
+  <MaxFilesCount>2</MaxFilesCount>
   <Compression />
   <DatabaseObjects />
   <Options>
@@ -43,7 +43,7 @@
     <PropertyValue Name="IncludeAdditional">true</PropertyValue>
     <PropertyValue Name="IgnoreColumnDefaultValues">false</PropertyValue>
     <PropertyValue Name="WriteLog">false</PropertyValue>
-    <PropertyValue Name="LogFileName" xml:space="preserve">C:\inetpub\DB copy\g1525\Backup.log</PropertyValue>
+    <PropertyValue Name="LogFileName" xml:space="preserve">c:\Program Files\Zend\Apache2\htdocs\inns\DB copy\g1525\Backup.log</PropertyValue>
     <PropertyValue Name="ErrorHandlingMode">0</PropertyValue>
     <PropertyValue Name="IncludeDrop">true</PropertyValue>
     <PropertyValue Name="IncludeIfExists">true</PropertyValue>
