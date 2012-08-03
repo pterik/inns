@@ -91,11 +91,15 @@ function checkForm() {
     if ( form.ref.value == "" ) {
         alert( "' . JText::_('Property must have a reference') . '" );
         return false;
-    } else if ( form.type_id.value == "0" ) {
+    };
+	if ( form.type_id.value == "0" ) {
         alert( "' . JText::_('Select a type of property') . '" );
         return false;
-    }
-    
+    };
+    if ( form.town_id.value == "0" ) {
+        alert( "' . JText::_('Select a town') . '" );
+        return false;
+    };
     ' . $editor->save( 'description' ) .' 
     return true;
 }');
@@ -373,5 +377,5 @@ function checkForm() {
   	</td><td></td></tr>
 	</table>
   </fieldset>
- 
+   
 </form>
