@@ -114,12 +114,16 @@ class JeaViewProperties extends JView
 		    $t_property_type = '- ' . JText::_( 'Property type' ).' -' ;
 		    $t_heating_type  = '- ' . JText::_( 'Heating type' ).' -' ;
 		    $t_hotwater_type = '- ' . JText::_( 'Hot water type' ).' -' ;
+		    $t_agent         = '- ' . JText::_( 'Agent' ).' -' ;
+		    $t_owner          = '- ' . JText::_( 'Owner' ).' -' ;
 		    
 		    $lists = array( 'departments' => array( $t_department , 'department_id'),
 		                    'conditions' => array( $t_condition , 'condition_id' ),
 		                    'areas' => array( $t_area , 'area_id' ),
 		                    'slogans' => array( $t_slogan , 'slogan_id' ),
 		                    'towns' => array( $t_town , 'town_id' ),
+							'agents' => array( $t_agent , 'agent_id' ),
+							'ownerss' => array( $t_owner , 'owner_id' ),
 		                    'types' => array( $t_property_type , 'type_id' ),
 		                    'heatingtypes' => array( $t_heating_type , 'heating_type' ),
 		                    'hotwatertypes' => array( $t_hotwater_type , 'hot_water_type' ),
