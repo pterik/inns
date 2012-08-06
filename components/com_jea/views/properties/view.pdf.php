@@ -64,16 +64,16 @@ class JeaViewProperties extends JeaView
         $text .= $row->description . '<br /><br />' ;
 
         $text .= $row->is_renting ?  JText::_('Renting price') : JText::_('Selling price') ;
-        $text .= ' : ' . $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) . '<br />';
+        $text .= ' : ' . $this->formatPrice( floatval($row->price) , JText::_('NOT PRESENT') ) . '<br />';
 
         if ( $row->charges ){
             $text .= JText::_('Charges') . ' : '
-            . $this->formatPrice( floatval($row->charges) , JText::_('Consult us') ) . '<br />';
+            . $this->formatPrice( floatval($row->charges) , JText::_('NOT PRESENT') ) . '<br />';
         }
 
         if ( $row->fees ){
             $text .= JText::_('Fees') . ' : '
-            . $this->formatPrice( floatval($row->fees) , JText::_('Consult us') ) . '<br />';
+            . $this->formatPrice( floatval($row->fees) , JText::_('NOT PRESENT') ) . '<br />';
         }
 
         if ( $row->condition ){

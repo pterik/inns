@@ -237,7 +237,6 @@ window.addEvent('domready', function() {
     <?php if ($this->params->get('show_towns', 1) == 1):?>
     <select id="town_id" name="town_id"  class="inputbox"><option value="0"> </option></select>
     <?php endif ?>
-    
     <span id="found_properties"><?php echo JText::_('Properties found')?> : <span id="properties_count">0</span></span>
     </p>
     

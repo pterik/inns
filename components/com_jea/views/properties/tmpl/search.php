@@ -51,10 +51,10 @@ if ($use_ajax ) {
     <label for="selling"><?php echo JText::_('Selling') ?></label>
     </p>
     <?php endif ?>
-    
+
 <?php if ( $use_ajax ): ?>
     <p>
-    <?php if ($this->params->get('show_types', 1) == 1):?>
+	<?php if ($this->params->get('show_types', 1) == 1):?>
     <select id="type_id" name="type_id" onchange="updateList(this)" class="inputbox"><option value="0"> </option></select>
     <?php endif ?>
     <?php if ($this->params->get('show_departments', 1) == 1):?>
@@ -72,12 +72,12 @@ if ($use_ajax ) {
 	<?php endif ?>
 	<?php if ($this->params->get('show_departments', 1) == 1):?>
 	<?php echo $this->getHtmlList('departments', '--'.JText::_( 'Department' ).'--', 'department_id' ) ?>
-	<?php endif ?>
+	<?php endif ?>	
 	<?php if ($this->params->get('show_towns', 1) == 1):?>
-  	<?php echo $this->getHtmlList('towns', '--'.JText::_( 'Town' ).'--', 'town_id' ) ?>
+	<?php echo $this->getHtmlList('towns', '--'.JText::_( 'Town' ).'--', 'town_id' ) ?>
   	<?php endif ?>
   	</p>
-  	
+  
 <?php endif ?>
   	
   	</fieldset>

@@ -103,7 +103,7 @@ $document->addScriptDeclaration($script);
 		<?php if ($row->type !="") echo "<strong>".$this->escape($row->type)."</strong><br /> \n"?>
 		<?php echo JText::_('Renting price short daily') ?> 
 		<strong> 
-		<?php echo $this->formatPrice( floatval($row->price) , JText::_('Consult us') ) ?>
+		<?php echo $this->formatPrice( floatval($row->price) , JText::_('NOT PRESENT') ) ?>
 		</strong>
 		<?php if (($row->price_monthly)&&(floatval($row->price_monthly)!='0')) {
 			echo ', '.JText::_('Renting price short monthly')." <strong> ".$this->formatPrice( floatval($row->price_monthly) , JText::_('Not present') )."</strong>".PHP_EOL ; 

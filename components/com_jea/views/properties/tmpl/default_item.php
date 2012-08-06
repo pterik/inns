@@ -83,11 +83,6 @@ JPluginHelper::importPlugin( 'jea' );
      <?php echo $this->getAdvantages( $this->row->advantages , 'ul' ) ?>
      <?php endif  ?>
    </div>
-    
-
-   	<?php if (intval($this->row->availability)): ?>
-   	<p><em><?php echo JText::_('Availability date') ?> : <?php echo JHTML::_('date',  $this->row->availability, JText::_('DATE_FORMAT_LC3') ) ?></em> </p>
-   	<?php endif  ?>
  
   <table>
     <tr>
@@ -101,7 +96,7 @@ JPluginHelper::importPlugin( 'jea' );
         <?php if ( $this->row->charges ): ?> 
          <tr>
            <td><?php echo JText::_('Charges') ?></td>
-           <td> : <strong><?php echo $this->formatPrice( floatval($this->row->charges), JText::_('Consult us') ) ?></strong></td>
+           <td> : <strong><?php echo $this->formatPrice( floatval($this->row->charges), JText::_('NOT PRESENT') ) ?></strong></td>
           </tr>
         <?php endif  ?>
    -->
@@ -115,7 +110,7 @@ JPluginHelper::importPlugin( 'jea' );
    <!--<?php if ($this->row->fees): ?> 
    <tr>
      <td><?php echo JText::_('Fees') ?></td>
-     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->fees), JText::_('Consult us') ) ?></strong></td>
+     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->fees), JText::_('NOT PRESENT') ) ?></strong></td>
    </tr>
       <?php endif  ?>
   -->
