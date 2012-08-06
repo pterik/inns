@@ -292,10 +292,12 @@ function checkForm() {
           <td width="100%"><?php echo $this->getHtmlList('slogans', $this->row->slogan_id ) ?></td>
       </tr>
       <tr>
-        <td><label for="availability"><?php echo JText::_('Property availability') ?> </label></td>
         <td>
-			<input type="text" class="text_area" id="availability" name="availability" value="<?php echo $this->row->availability ?>" />
-			<input type="reset" class="button" value="..." onclick="return showCalendar('availability', '%Y-%m-%d');" />
+		<!--<label for="availability"><?php echo JText::_('Property availability') ?> </label>-->
+		</td>
+        <td>
+			<!--<input type="text" class="text_area" id="availability" name="availability" value="<?php echo $this->row->availability ?>" /> -->
+			<!--<input type="reset" class="button" value="..." onclick="return showCalendar('availability', '%Y-%m-%d');" />  -->
 		</td>
       </tr>
     </table>

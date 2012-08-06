@@ -83,13 +83,13 @@ JPluginHelper::importPlugin( 'jea' );
     <tr>
       <td><?php echo $this->row->is_renting ?  JText::_('Renting price') : JText::_('Selling price') ?></td>
     
-      <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price) , JText::_('Consult us') ) ?></strong></td>
+      <td> : <strong><?php echo $this->formatPrice( floatval($this->row->price) , JText::_('NOT PRESENT') ) ?></strong></td>
    </tr>
       
    <?php if ( $this->row->charges ): ?> 
    <tr>
      <td><?php echo JText::_('Charges') ?></td>
-     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->charges), JText::_('Consult us') ) ?></strong></td>
+     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->charges), JText::_('NOT PRESENT') ) ?></strong></td>
    </tr>
    <?php endif  ?>
    
@@ -103,7 +103,7 @@ JPluginHelper::importPlugin( 'jea' );
    <?php if ($this->row->fees): ?> 
    <tr>
      <td><?php echo JText::_('Fees') ?></td>
-     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->fees), JText::_('Consult us') ) ?></strong></td>
+     <td> : <strong><?php echo $this->formatPrice( floatval($this->row->fees), JText::_('NOT PRESENT') ) ?></strong></td>
    </tr>
       <?php endif  ?>
   </table>
