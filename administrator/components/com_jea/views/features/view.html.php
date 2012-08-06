@@ -33,7 +33,9 @@ class JeaViewFeatures extends JView
             'advantages'    => 'Advantages' ,
             'heatingtypes'  => 'Heating types' ,
             'hotwatertypes' => 'Hot water types',
-            'slogans'       => 'Slogans' 
+            'slogans'       => 'Slogans', 
+            'agents'        => 'Agents',
+            'owners'        => 'Owners' 
     );
 
 	function display( $tpl = null )
@@ -92,7 +94,9 @@ class JeaViewFeatures extends JView
 			'advantages'    => 'Advantages List' ,
 			'heatingtypes'  => 'Heating types List' ,
 	        'hotwatertypes' => 'Hot water types List',
-			'slogans'       => 'Slogans list'
+			'slogans'       => 'Slogans list',
+			'agents'        => 'Agents list'
+			'owners'       => 'Owners list'
 		);	
 			
 		$this->assign( $items );
@@ -123,7 +127,9 @@ class JeaViewFeatures extends JView
 	        'areas'       => 'Area' ,
 	        'advantages'  => 'Advantage',
 	        'heatingtypes' => 'Heating type' ,
-	        'hotwatertypes' => 'Hot water type'
+	        'hotwatertypes' => 'Hot water type',
+	        'agents' => 'Agent',
+	        'owners' => 'Owner'
         );
 		
 		$table_name = JText::_( $tablesTranslations[$this->get('tableName')] ) ;
