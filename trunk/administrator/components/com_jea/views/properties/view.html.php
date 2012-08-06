@@ -123,7 +123,7 @@ class JeaViewProperties extends JView
 		                    'slogans' => array( $t_slogan , 'slogan_id' ),
 		                    'towns' => array( $t_town , 'town_id' ),
 							'agents' => array( $t_agent , 'agent_id' ),
-							'ownerss' => array( $t_owner , 'owner_id' ),
+							'owners' => array( $t_owner , 'owner_id' ),
 		                    'types' => array( $t_property_type , 'type_id' ),
 		                    'heatingtypes' => array( $t_heating_type , 'heating_type' ),
 		                    'hotwatertypes' => array( $t_hotwater_type , 'hot_water_type' ),
