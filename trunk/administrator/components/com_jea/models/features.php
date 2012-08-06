@@ -94,7 +94,9 @@ class JeaModelFeatures extends JModel
 			    'areas', 
 			    'advantages',
 		        'heatingtypes',
-			    'hotwatertypes'
+			    'hotwatertypes',
+				'agents',
+				'owners'
 			);
 			
 		if( !in_array( $tableName, $tables ) ){
