@@ -1,6 +1,6 @@
 ﻿-- Скрипт сгенерирован Devart dbForge Studio for MySQL, Версия 5.0.82.1
 -- Домашняя страница продукта: http://www.devart.com/ru/dbforge/mysql/studio
--- Дата скрипта: 17.08.2012 20:17:19
+-- Дата скрипта: 17.08.2012 20:44:44
 -- Версия сервера: 5.5.25a
 -- Версия клиента: 4.1
 
@@ -237,7 +237,7 @@ CREATE TABLE g1525_content (
 )
 ENGINE = INNODB
 AUTO_INCREMENT = 47
-AVG_ROW_LENGTH = 2797
+AVG_ROW_LENGTH = 2493
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -1097,7 +1097,7 @@ CREATE OR REPLACE
 	SQL SECURITY INVOKER
 VIEW g1525_jea_agents_v
 AS
-	select `u`.`id` AS `id`,`u`.`username` AS `name`,`u`.`email` AS `email`,`u`.`sendEmail` AS `sendEmail`,`u`.`registerDate` AS `registerDate`,`u`.`lastvisitDate` AS `lastvisitDate`,`u`.`activation` AS `activation`,`u`.`telephone1` AS `telephone1`,`u`.`telephone2` AS `telephone2`,`u`.`telephone3` AS `telephone3`,(case when (length(trim(`d`.`mobile`)) > 0) then `d`.`mobile` else ' ' end) AS `telephone4`,(case when (length(trim(`d`.`telephone`)) > 0) then `d`.`telephone` else ' ' end) AS `telephone5`,(case when (length(trim(`d`.`fax`)) > 0) then `d`.`fax` else ' ' end) AS `fax` from (`g1525_users` `u` left join `g1525_contact_details` `d` on((`u`.`id` = `d`.`user_id`)));
+	select `u`.`id` AS `id`,`u`.`username` AS `name`,`u`.`email` AS `email`,`u`.`sendEmail` AS `sendEmail`,`u`.`registerDate` AS `registerDate`,`u`.`lastvisitDate` AS `lastvisitDate`,`u`.`activation` AS `activation`,(case when (length(trim(`d`.`mobile`)) > 0) then `d`.`mobile` else ' ' end) AS `telephone1`,(case when (length(trim(`d`.`telephone`)) > 0) then `d`.`telephone` else ' ' end) AS `telephone2`,(case when (length(trim(`d`.`fax`)) > 0) then `d`.`fax` else ' ' end) AS `telephone3` from (`g1525_users` `u` left join `g1525_contact_details` `d` on((`u`.`id` = `d`.`user_id`)));
 
 --
 -- Описание для представления g1525_jea_owners_v
