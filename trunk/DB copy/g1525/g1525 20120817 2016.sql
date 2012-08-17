@@ -1,7 +1,7 @@
 ﻿-- Скрипт сгенерирован Devart dbForge Studio for MySQL, Версия 5.0.82.1
 -- Домашняя страница продукта: http://www.devart.com/ru/dbforge/mysql/studio
--- Дата скрипта: 28.07.2012 19:01:48
--- Версия сервера: 5.5.23
+-- Дата скрипта: 17.08.2012 20:17:19
+-- Версия сервера: 5.5.25a
 -- Версия клиента: 4.1
 
 -- 
@@ -187,8 +187,8 @@ CREATE TABLE g1525_contact_details (
   INDEX catid (catid)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 2
-AVG_ROW_LENGTH = 16384
+AUTO_INCREMENT = 4
+AVG_ROW_LENGTH = 5461
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -237,7 +237,7 @@ CREATE TABLE g1525_content (
 )
 ENGINE = INNODB
 AUTO_INCREMENT = 47
-AVG_ROW_LENGTH = 2493
+AVG_ROW_LENGTH = 2797
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -286,7 +286,7 @@ CREATE TABLE g1525_core_acl_aro (
 )
 ENGINE = INNODB
 AUTO_INCREMENT = 16
-AVG_ROW_LENGTH = 3276
+AVG_ROW_LENGTH = 4096
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -356,7 +356,7 @@ CREATE TABLE g1525_core_acl_groups_aro_map (
   UNIQUE INDEX group_id_aro_id_groups_aro_map (group_id, section_value, aro_id)
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 3276
+AVG_ROW_LENGTH = 4096
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -417,31 +417,6 @@ CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 --
--- Описание для таблицы g1525_jea_agents
---
-DROP TABLE IF EXISTS g1525_jea_agents;
-CREATE TABLE g1525_jea_agents (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  user_id INT(11) DEFAULT NULL,
-  name VARCHAR(255) NOT NULL DEFAULT '',
-  telephone1 VARCHAR(20) NOT NULL DEFAULT '',
-  telephone2 VARCHAR(20) NOT NULL DEFAULT '',
-  telephone3 VARCHAR(20) NOT NULL DEFAULT '',
-  email VARCHAR(100) NOT NULL DEFAULT '',
-  sendEmail TINYINT(4) DEFAULT 0,
-  registerDate DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  lastvisitDate DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-  activation VARCHAR(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (id),
-  INDEX user_id (user_id)
-)
-ENGINE = INNODB
-AUTO_INCREMENT = 3
-AVG_ROW_LENGTH = 8192
-CHARACTER SET utf8
-COLLATE utf8_general_ci;
-
---
 -- Описание для таблицы g1525_jea_areas
 --
 DROP TABLE IF EXISTS g1525_jea_areas;
@@ -486,8 +461,8 @@ CREATE TABLE g1525_jea_departments (
   INDEX name (value)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 2
-AVG_ROW_LENGTH = 16384
+AUTO_INCREMENT = 3
+AVG_ROW_LENGTH = 8192
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -529,13 +504,14 @@ COLLATE utf8_general_ci;
 DROP TABLE IF EXISTS g1525_jea_owners;
 CREATE TABLE g1525_jea_owners (
   id INT(11) NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL DEFAULT '',
+  value VARCHAR(255) NOT NULL DEFAULT '',
   telephone1 VARCHAR(20) NOT NULL DEFAULT '',
   telephone2 VARCHAR(20) NOT NULL DEFAULT '',
   telephone3 VARCHAR(20) NOT NULL DEFAULT '',
   sendEmail TINYINT(4) DEFAULT 0,
   agent_id INT(11) DEFAULT NULL,
   email VARCHAR(255) DEFAULT '',
+  ordering INT(11) DEFAULT NULL,
   PRIMARY KEY (id),
   INDEX agent_id (agent_id)
 )
@@ -590,8 +566,10 @@ CREATE TABLE g1525_jea_properties (
   longitude VARCHAR(20) NOT NULL DEFAULT '0',
   price_monthly DECIMAL(12, 2) DEFAULT 0.00,
   agent_id INT(11) DEFAULT NULL COMMENT 'Агент подавший объявление',
-  owner_id INT(11) DEFAULT NULL COMMENT 'Владелец разместивший объявление',
   help_geo TINYINT(2) UNSIGNED DEFAULT 0 COMMENT 'Если 1 то просят указать местоположение на карте',
+  telephone1 VARCHAR(255) DEFAULT NULL COMMENT 'Первый телефон объявления',
+  telephone2 VARCHAR(255) DEFAULT NULL COMMENT 'Второй телефон объявления',
+  telephone3 VARCHAR(255) DEFAULT NULL COMMENT 'Третий телефон объявления',
   PRIMARY KEY (id),
   INDEX idx_jea_departmentid (department_id),
   INDEX idx_jea_isrenting (is_renting),
@@ -726,7 +704,7 @@ CREATE TABLE g1525_messages (
   INDEX useridto_state (user_id_to, state)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -1030,6 +1008,9 @@ CREATE TABLE g1525_users (
   lastvisitDate DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
   activation VARCHAR(100) NOT NULL DEFAULT '',
   params TEXT NOT NULL,
+  telephone1 VARCHAR(255) DEFAULT NULL COMMENT 'Первый телефон агента',
+  telephone2 VARCHAR(255) DEFAULT NULL COMMENT 'Второй телефон агента',
+  telephone3 VARCHAR(255) DEFAULT NULL COMMENT 'Третий телефон агента',
   PRIMARY KEY (id),
   INDEX email (email),
   INDEX gid_block (gid, block),
@@ -1039,7 +1020,7 @@ CREATE TABLE g1525_users (
 )
 ENGINE = INNODB
 AUTO_INCREMENT = 68
-AVG_ROW_LENGTH = 3276
+AVG_ROW_LENGTH = 4096
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -1073,6 +1054,41 @@ AVG_ROW_LENGTH = 2730
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+DELIMITER $$
+
+--
+-- Описание для функции get_sequence
+--
+DROP FUNCTION IF EXISTS get_sequence$$
+CREATE FUNCTION get_sequence(TABLENAME VARCHAR(255), PARAM1 VARCHAR(255))
+  RETURNS int(11)
+  SQL SECURITY INVOKER
+  READS SQL DATA
+  COMMENT 'NEXTVAL - в зависимости от таблицы и аргументов возвращать следующее значение ключа'
+BEGIN
+  DECLARE L_max INT(11);
+
+  IF tablename = 'g1525_jea_properties' THEN
+  SELECT max(ref)
+  INTO
+    l_max
+  FROM
+    g1525_jea_properties;
+  IF (l_max IS NULL) OR (L_max = 0) THEN
+    SET l_max = 1;
+  ELSE
+    SET l_max = l_max + 1;
+  END IF;
+  RETURN L_max;
+END IF;
+
+RETURN 0;  
+
+END
+$$
+
+DELIMITER ;
+
 --
 -- Описание для представления g1525_jea_agents_v
 --
@@ -1081,7 +1097,7 @@ CREATE OR REPLACE
 	SQL SECURITY INVOKER
 VIEW g1525_jea_agents_v
 AS
-	select `g1525_jea_agents`.`id` AS `id`,`g1525_jea_agents`.`user_id` AS `user_id`,`g1525_jea_agents`.`name` AS `name`,(case when (((length(trim(`g1525_jea_agents`.`telephone1`)) + length(trim(`g1525_jea_agents`.`telephone2`))) + length(trim(`g1525_jea_agents`.`telephone3`))) > 0) then ' ,' else ' ' end) AS `tel_separator`,(case when (length(trim(`g1525_jea_agents`.`telephone1`)) > 0) then `g1525_jea_agents`.`telephone1` else ' ' end) AS `telephone1`,(case when (length(trim(`g1525_jea_agents`.`telephone2`)) > 0) then concat(' ,',`g1525_jea_agents`.`telephone2`) else ' ' end) AS `telephone2`,(case when (length(trim(`g1525_jea_agents`.`telephone3`)) > 0) then concat(' ,',`g1525_jea_agents`.`telephone3`) else ' ' end) AS `telephone3`,`g1525_jea_agents`.`email` AS `email`,`g1525_jea_agents`.`sendEmail` AS `sendEmail`,`g1525_jea_agents`.`registerDate` AS `registerDate`,`g1525_jea_agents`.`lastvisitDate` AS `lastvisitDate`,`g1525_jea_agents`.`activation` AS `activation` from `g1525_jea_agents`;
+	select `u`.`id` AS `id`,`u`.`username` AS `name`,`u`.`email` AS `email`,`u`.`sendEmail` AS `sendEmail`,`u`.`registerDate` AS `registerDate`,`u`.`lastvisitDate` AS `lastvisitDate`,`u`.`activation` AS `activation`,`u`.`telephone1` AS `telephone1`,`u`.`telephone2` AS `telephone2`,`u`.`telephone3` AS `telephone3`,(case when (length(trim(`d`.`mobile`)) > 0) then `d`.`mobile` else ' ' end) AS `telephone4`,(case when (length(trim(`d`.`telephone`)) > 0) then `d`.`telephone` else ' ' end) AS `telephone5`,(case when (length(trim(`d`.`fax`)) > 0) then `d`.`fax` else ' ' end) AS `fax` from (`g1525_users` `u` left join `g1525_contact_details` `d` on((`u`.`id` = `d`.`user_id`)));
 
 --
 -- Описание для представления g1525_jea_owners_v
@@ -1091,7 +1107,7 @@ CREATE OR REPLACE
 	SQL SECURITY INVOKER
 VIEW g1525_jea_owners_v
 AS
-	select `g1525_jea_owners`.`id` AS `id`,`g1525_jea_owners`.`name` AS `name`,(case when (length(trim(`g1525_jea_owners`.`telephone1`)) > 0) then `g1525_jea_owners`.`telephone1` else ' ' end) AS `telephone1`,(case when (length(trim(`g1525_jea_owners`.`telephone2`)) > 0) then concat(' ,',`g1525_jea_owners`.`telephone2`) else ' ' end) AS `telephone2`,(case when (length(trim(`g1525_jea_owners`.`telephone3`)) > 0) then concat(' ,',`g1525_jea_owners`.`telephone3`) else ' ' end) AS `telephone3`,`g1525_jea_owners`.`sendEmail` AS `sendEmail`,`g1525_jea_owners`.`agent_id` AS `agent_id`,`g1525_jea_owners`.`email` AS `email` from `g1525_jea_owners`;
+	select `g1525_jea_owners`.`id` AS `id`,' ' AS `name`,(case when (length(trim(`g1525_jea_owners`.`telephone1`)) > 0) then `g1525_jea_owners`.`telephone1` else ' ' end) AS `telephone1`,(case when (length(trim(`g1525_jea_owners`.`telephone2`)) > 0) then concat(' ,',`g1525_jea_owners`.`telephone2`) else ' ' end) AS `telephone2`,(case when (length(trim(`g1525_jea_owners`.`telephone3`)) > 0) then concat(' ,',`g1525_jea_owners`.`telephone3`) else ' ' end) AS `telephone3`,`g1525_jea_owners`.`sendEmail` AS `sendEmail`,`g1525_jea_owners`.`agent_id` AS `agent_id`,`g1525_jea_owners`.`email` AS `email` from `g1525_jea_owners`;
 
 -- 
 -- Вывод данных для таблицы g1525_banner
@@ -1127,7 +1143,7 @@ INSERT INTO g1525_categories VALUES
   (4, 0, 'Joomla!', '', 'joomla', '', 'com_newsfeeds', 'left', '', 0, 0, '0000-00-00 00:00:00', NULL, 2, 0, 0, ''),
   (5, 0, 'Free and Open Source Software', '', 'free-and-open-source-software', '', 'com_newsfeeds', 'left', 'Read the latest news about free and open source software from some of its leading advocates.', 0, 0, '0000-00-00 00:00:00', NULL, 3, 0, 0, ''),
   (6, 0, 'Related Projects', '', 'related-projects', '', 'com_newsfeeds', 'left', 'Joomla builds on and collaborates with many other free and open source projects. Keep up with the latest news from some of them.', 0, 0, '0000-00-00 00:00:00', NULL, 4, 0, 0, ''),
-  (12, 0, 'Contacts', '', 'contacts', '', 'com_contact_details', 'left', 'Contact Details for this Web site', 1, 0, '0000-00-00 00:00:00', NULL, 0, 0, 0, ''),
+  (12, 0, 'Contacts', '', 'contacts', '', 'com_contact_details', 'left', 'Contact Details for this Web site', 1, 62, '2012-08-07 13:52:05', NULL, 0, 0, 0, ''),
   (13, 0, 'Joomla', '', 'joomla', '', 'com_banner', 'left', '', 1, 0, '0000-00-00 00:00:00', NULL, 0, 0, 0, ''),
   (14, 0, 'Text Ads', '', 'text-ads', '', 'com_banner', 'left', '', 1, 0, '0000-00-00 00:00:00', NULL, 0, 0, 0, ''),
   (15, 0, 'Features', '', 'features', '', 'com_content', 'left', '', 0, 0, '0000-00-00 00:00:00', NULL, 6, 0, 0, ''),
@@ -1136,7 +1152,7 @@ INSERT INTO g1525_categories VALUES
   (19, 0, 'Other Resources', '', 'other-resources', '', 'com_weblinks', 'left', '', 1, 0, '0000-00-00 00:00:00', NULL, 2, 0, 0, ''),
   (25, 0, 'The Project', '', 'the-project', '', '4', 'left', 'General facts about Joomla!<br />', 1, 0, '0000-00-00 00:00:00', NULL, 1, 0, 0, ''),
   (27, 0, 'New to Joomla!', '', 'new-to-joomla', '', '3', 'left', 'Questions for new users of Joomla!', 0, 0, '0000-00-00 00:00:00', NULL, 3, 0, 0, ''),
-  (28, 0, 'Current Users', '', 'current-users', '', '3', 'left', 'Questions that users migrating to Joomla! 1.5 are likely to raise<br />', 0, 0, '0000-00-00 00:00:00', NULL, 2, 0, 0, ''),
+  (28, 0, 'Current Users', '', 'current-users', '', '3', 'left', 'Questions that users migrating to Joomla! 1.5 are likely to raise<br />', 0, 62, '2012-08-07 13:52:24', NULL, 2, 0, 0, ''),
   (29, 0, 'The CMS', '', 'the-cms', '', '4', 'left', 'Information about the software behind Joomla!<br />', 0, 0, '0000-00-00 00:00:00', NULL, 2, 0, 0, ''),
   (30, 0, 'The Community', '', 'the-community', '', '4', 'left', 'About the millions of Joomla! users and Web sites<br />', 0, 0, '0000-00-00 00:00:00', NULL, 3, 0, 0, ''),
   (31, 0, 'General', '', 'general', '', '3', 'left', 'General questions about the Joomla! CMS', 0, 0, '0000-00-00 00:00:00', NULL, 1, 0, 0, ''),
@@ -1198,7 +1214,9 @@ INSERT INTO g1525_components VALUES
 -- Вывод данных для таблицы g1525_contact_details
 --
 INSERT INTO g1525_contact_details VALUES 
-  (1, 'Name', 'name', 'Position', 'Street', 'Suburb', 'State', 'Country', 'Zip Code', 'Telephone', 'Fax', 'Miscellanous info', 'powered_by.png', 'top', 'email@email.com', 1, 1, 0, '0000-00-00 00:00:00', 1, 'show_name=1\r\nshow_position=1\r\nshow_email=0\r\nshow_street_address=1\r\nshow_suburb=1\r\nshow_state=1\r\nshow_postcode=1\r\nshow_country=1\r\nshow_telephone=1\r\nshow_mobile=1\r\nshow_fax=1\r\nshow_webpage=1\r\nshow_misc=1\r\nshow_image=1\r\nallow_vcard=0\r\ncontact_icons=0\r\nicon_address=\r\nicon_email=\r\nicon_telephone=\r\nicon_fax=\r\nicon_misc=\r\nshow_email_form=1\r\nemail_description=1\r\nshow_email_copy=1\r\nbanned_email=\r\nbanned_subject=\r\nbanned_text=', 0, 12, 0, '', '');
+  (1, 'Name', 'name', 'Position', 'Street', 'Suburb', 'State', 'Country', 'Zip Code', 'Telephone', 'Fax', 'Miscellanous info', 'powered_by.png', 'top', 'email@email.com', 1, 1, 0, '0000-00-00 00:00:00', 1, 'show_name=1\r\nshow_position=1\r\nshow_email=0\r\nshow_street_address=1\r\nshow_suburb=1\r\nshow_state=1\r\nshow_postcode=1\r\nshow_country=1\r\nshow_telephone=1\r\nshow_mobile=1\r\nshow_fax=1\r\nshow_webpage=1\r\nshow_misc=1\r\nshow_image=1\r\nallow_vcard=0\r\ncontact_icons=0\r\nicon_address=\r\nicon_email=\r\nicon_telephone=\r\nicon_fax=\r\nicon_misc=\r\nshow_email_form=1\r\nemail_description=1\r\nshow_email_copy=1\r\nbanned_email=\r\nbanned_subject=\r\nbanned_text=', 0, 12, 0, '', ''),
+  (2, 'Сергей', '2012-08-07-13-49-33', '', '', '', '', '', '', '(050)321-45-65', '(063)12-13-14', '', '', NULL, 'sergey@gmail.com', 0, 1, 62, '2012-08-07 13:54:37', 2, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_telephone=1\nshow_mobile=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 63, 12, 1, '(067)123-56-98', 'http://inns.in.ua/sergey'),
+  (3, 'Василий', 'agent2', 'агент', '', 'Харьков', '', '', '', '(050)988-54-32', '(063)987-43-21', '', '', NULL, 'vasily@gmail.com', 0, 1, 0, '0000-00-00 00:00:00', 3, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_telephone=1\nshow_mobile=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 64, 12, 1, '(067)905-23-32', 'http://inns.in.ua/vasily');
 
 -- 
 -- Вывод данных для таблицы g1525_content
@@ -1263,11 +1281,10 @@ INSERT INTO g1525_content VALUES
 -- Вывод данных для таблицы g1525_core_acl_aro
 --
 INSERT INTO g1525_core_acl_aro VALUES 
-  (10, 'users', '62', 0, 'Administrator', 0),
+  (10, 'users', '62', 0, 'Админ', 0),
   (11, 'users', '63', 0, 'agent', 0),
   (12, 'users', '64', 0, 'agent2', 0),
-  (13, 'users', '65', 0, 'Славик', 0),
-  (15, 'users', '67', 0, 'Николай', 0);
+  (15, 'users', '67', 0, 'agent3', 0);
 
 -- 
 -- Вывод данных для таблицы g1525_core_acl_aro_groups
@@ -1306,10 +1323,9 @@ INSERT INTO g1525_core_acl_aro_sections VALUES
 --
 INSERT INTO g1525_core_acl_groups_aro_map VALUES 
   (25, '', 10),
-  (25, '', 13),
-  (25, '', 15),
-  (34, '', 11),
-  (34, '', 12);
+  (32, '', 11),
+  (32, '', 12),
+  (32, '', 15);
 
 -- 
 -- Вывод данных для таблицы g1525_core_log_items
@@ -1358,13 +1374,6 @@ INSERT INTO g1525_jea_advantages VALUES
   (23, 'Банные принадлежности', 23);
 
 -- 
--- Вывод данных для таблицы g1525_jea_agents
---
-INSERT INTO g1525_jea_agents VALUES 
-  (1, 63, 'Иван Иванович', '(067)1232104', '(050)1210432', '', 'test@gmail.com', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1'),
-  (2, 64, 'Петр Петрович', '', '', '', 'test2@gmail.com', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1');
-
--- 
 -- Вывод данных для таблицы g1525_jea_areas
 --
 INSERT INTO g1525_jea_areas VALUES 
@@ -1393,7 +1402,8 @@ INSERT INTO g1525_jea_conditions VALUES
 -- Вывод данных для таблицы g1525_jea_departments
 --
 INSERT INTO g1525_jea_departments VALUES 
-  (1, 'Any', 1);
+  (1, 'Any', 1),
+  (2, 'Украина', 2);
 
 -- 
 -- Вывод данных для таблицы g1525_jea_heatingtypes
@@ -1415,23 +1425,23 @@ INSERT INTO g1525_jea_hotwatertypes VALUES
 -- Вывод данных для таблицы g1525_jea_owners
 --
 INSERT INTO g1525_jea_owners VALUES 
-  (1, 'Владелец1', '(050)0010101', '(067)0010101', '(063)0010101', 0, 1, ''),
-  (2, 'Сидор Сидорович', '(044)0020202', '(050)0020202', ' ', 0, 2, '');
+  (1, 'Владелец1', '(050)0010101', '(067)0010101', '(063)0010101', 0, 1, '', NULL),
+  (2, 'Сидор Сидорович', '(044)0020202', '(050)0020202', ' ', 0, 2, '', NULL);
 
 -- 
 -- Вывод данных для таблицы g1525_jea_properties
 --
 INSERT INTO g1525_jea_properties VALUES 
-  (7, '1006', 'Своя квартира на Павловом поле', '----', 3, 0, 105.00, 'ул. Ленина 20', 4, 0, '', 0, 2, 40, 0, 0, 0.00, 0.00, 0.00, 2, 0, 0, 0, '2012-07-24', 0, '-1-2-3-4-7-8-9-10-11-12-14-15-16-17-18-19-20-22-23-', '<p>Сдам посуточно 1к. кв. студию в 5 мин. от к-тр им. Довженка новый современный ремонт вся бытовая техника класса люкс кондиционер wi-fi уютно 5й этаж 300грн. 066-881-92-45.</p>', 0, 1, 5, 0, '2012-06-08 13:35:19', 0, '0000-00-00 00:00:00', 62, 84, '50.032941', '36.214125', 120.00, 1, 1, 0),
-  (8, '1007', '1-комн возле Госпрома', '1---', 3, 1, 80.00, 'пр. Ленина', 4, 0, '', 0, 1, 52, 0, 1, 0.00, 0.00, 0.00, 0, 0, 0, 0, '2012-07-23', 0, '', '<p>Сдам посуточно свою 1 комн. квартиру в центре (рядом с Госпромом), комфортная, вся техника, 150 грн в сутки.</p>', 0, 1, 6, 0, '2012-06-08 13:37:06', 0, '0000-00-00 00:00:00', 62, 112, '50.015485', '36.232671', 0.00, 1, 1, 0),
-  (9, '1008', '2-комнатная на Холодной Горе', '2----', 6, 1, 100.00, 'м. Холодная Гора, Полтавский шлях', 0, 0, '', 0, 2, 60, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '1899-12-30', 0, '', '<p>М. Хол. гора, своя 1к. кв-ра посуточно, почасово. Отл. ремонт, новый дом, душ. кабина, бойлер, каб-е Тв, DVD, высокоскор-ой Wi-Fi Триолан, новая кровать, холодильник, кондиционер, фен, утюг, посуда, свеж белье. Чеки. 067-812-52-80, 066-314-42-60.</p>', 0, 1, 7, 0, '2012-06-08 13:40:10', 0, '1899-12-30 00:00:00', 62, 27, '49.986371', '36.193156', 102.00, 1, 1, 0),
-  (10, '1010', 'Василий заплатил за 2 месяца', '---2-', 3, 1, 80.00, 'пр. Героев Труда, 16', 4, 11, '', 1, 3, 25, 0, 1, 0.00, 0.00, 0.00, 1, 0, 0, 0, '2012-07-24', 0, '', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Однокомнатная квартира, 9/9 этажного дома, рядом со ст. м. Барабашова, общая площадь 30 кв.м, жилая 15 кв.м. Хороший ремонт, новая мебель, сантехника. Холодильник, микроволновая печь, электрочайник, утюг, гладильная доска, телевизор, DVD, кондиционер, интернет (по договоренности), 4 спальных места (2 дивана-книжки), чистая постель, полотенца, тапочки.</span></p>', 0, 1, 8, 0, '2012-06-08 16:25:26', 0, '0000-00-00 00:00:00', 64, 30, '50.000546', '36.300035', 0.00, 1, 1, 0),
-  (11, '1011', '2-комнатная на пл. Конституции', '2----_2', 6, 1, 110.00, 'пл. Конституции, 7', 0, 0, '', 0, 1, 50, 0, 0, 0.00, 0.00, 0.00, 1, 1, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Сдам почасово-посуточно 2-ком. кв. пл. Конституции. Квартира с евроремонтом, с/у в кафеле, горячая вода круглосуточно, на кухне плитка, новая кухонная мебель. В комнате новая 2-х спальная кровать и одноместный диван, бронированная дверь, пластиковые окна, окна выходят на тихий зеленый дворик. Рядом  Макдональс, развлекательный комплекс. Транспортная развязка удобная, центр города</span></p>', 0, 1, 9, 0, '2012-06-08 16:42:39', 0, '1899-12-30 00:00:00', 64, 27, '49.989546', '36.232282', 112.00, 2, 2, 0),
-  (12, '1012', '2-комнатная возле м. Университет', '2----_2', 6, 1, 120.00, 'ул. Сумская, 15', 0, 0, '', 0, 2, 65, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">10 мин ходьбы до м. "Университет",во дворе магазин, 5 мин ходьбы до набережной на пляж, кафе и сауны, удобная развязка. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Двухкомнатная, уютная, чистая квартира от хозяйки. Вся бытовая техника, постельные и банные принадлежности, командировочным документы, есть другие варианты! </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Возможно ПОЧАСОВАЯ  аренда цена от 100 грн. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Круглосуточное заселение! Бронирование. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Добро пожаловать, всегда рады!</span></p>', 0, 1, 10, 0, '2012-06-08 16:49:28', 0, '1899-12-30 00:00:00', 64, 26, '49.996515', '36.232853', 122.00, 2, 2, 0),
-  (13, '1013', '2-комнатная ул. Ленина', '2---_2', 6, 1, 65.00, 'ул. Ленина 20', 0, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Квартира возле м. Научная. Рядом рынок, Институт Неврологии, Дет. Педиатрич. Больница, институт ПАГ. Вся бытовая техника, кондиционер, ТВ. Постоянным клиентам скидки</span></p>', 4, 1, 11, 0, '2012-06-08 17:05:51', 0, '1899-12-30 00:00:00', 64, 21, '50.012714', '36.232144', 67.00, 2, 2, 0),
-  (14, '1015', '2-комнатная пр. Победы', '2---', 6, 1, 60.00, 'Пр. Победы 40', 0, 0, '', 0, 2, 0, 0, 0, 0.00, 0.00, 0.00, 0, 1, 0, 0, '1899-12-30', 0, '', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Уютная двухкомнатная мансарда, расположена в 2-х минутах ходьбы от ст.м. Интернациональная.В квартире, большая гостиная, спальная с двуспальным диваном, санузел совмещен. Кухня полностью укомплектована бытовой техникой и столовыми приборами. Постельные и банные принадлежности прилагаются. Приятного время проведения в Харькове!!!!</span></p>', 0, 1, 12, 0, '2012-06-08 17:14:49', 0, '1899-12-30 00:00:00', 64, 16, '50.04997', '36.192241', 62.00, 2, 2, 0),
-  (15, '1021', '', '', 3, 0, 0.00, 'Харьков, ул. Ленина 6', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 0, 6, 0, '2012-07-28 03:05:46', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, NULL, 0),
-  (16, '1022', '', '_2', 6, 0, 0.00, 'пр. Героев Сталинграда 10', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 7, 0, '2012-07-28 03:06:55', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, NULL, 0);
+  (7, '1006', 'Своя квартира на Павловом поле', '----', 3, 1, 105.00, 'ул. Ленина 20', 4, 0, '', 0, 2, 40, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '2012-07-24', 0, '-1-2-3-4-7-8-9-10-11-12-14-15-16-17-18-19-20-21-22-23-', '<p>Сдам посуточно 1к. кв. студию в 5 мин. от к-тр им. Довженка новый современный ремонт вся бытовая техника класса люкс кондиционер wi-fi уютно 5й этаж 300грн. 066-881-92-45.</p>', 0, 1, 5, 0, '2012-06-08 13:35:19', 0, '0000-00-00 00:00:00', 62, 97, '50.032941', '36.214125', 120.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (8, '1007', '1-комн возле Госпрома', '1---', 3, 1, 80.00, 'пр. Ленина', 4, 0, '', 0, 1, 52, 0, 1, 0.00, 0.00, 0.00, 0, 0, 0, 0, '2012-07-23', 0, '', '<p>Сдам посуточно свою 1 комн. квартиру в центре (рядом с Госпромом), комфортная, вся техника, 150 грн в сутки.</p>', 0, 1, 6, 0, '2012-06-08 13:37:06', 0, '0000-00-00 00:00:00', 62, 113, '50.015485', '36.232671', 0.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (9, '1008', '2-комнатная на Холодной Горе', '2----', 6, 1, 100.00, 'м. Холодная Гора, Полтавский шлях', 4, 0, '', 0, 2, 60, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '1899-12-30', 0, '-1-7-', '<p>М. Хол. гора, своя 1к. кв-ра посуточно, почасово. Отл. ремонт, новый дом, душ. кабина, бойлер, каб-е Тв, DVD, высокоскор-ой Wi-Fi Триолан, новая кровать, холодильник, кондиционер, фен, утюг, посуда, свеж белье. Чеки. 067-812-52-80, 066-314-42-60.</p>', 0, 1, 7, 0, '2012-06-08 13:40:10', 0, '0000-00-00 00:00:00', 62, 30, '49.986371', '36.193156', 102.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (10, '1010', 'Василий заплатил за 2 месяца', '---2-', 6, 1, 80.00, 'пр. Героев Труда, 16', 4, 0, '', 0, 3, 25, 0, 0, 0.00, 0.00, 0.00, 1, 1, 0, 0, '2012-07-24', 0, '-1-2-3-4-5-6-7-13-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Однокомнатная квартира, 9/9 этажного дома, рядом со ст. м. Барабашова, общая площадь 30 кв.м, жилая 15 кв.м. Хороший ремонт, новая мебель, сантехника. Холодильник, микроволновая печь, электрочайник, утюг, гладильная доска, телевизор, DVD, кондиционер, интернет (по договоренности), 4 спальных места (2 дивана-книжки), чистая постель, полотенца, тапочки.</span></p>', 0, 1, 8, 0, '2012-06-08 16:25:26', 0, '0000-00-00 00:00:00', 64, 31, '50.000546', '36.300035', 1000.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (11, '1011', '2-комнатная на пл. Конституции', '2----_2', 6, 1, 110.00, 'пл. Конституции, 7', 4, 0, '', 0, 1, 50, 0, 0, 0.00, 0.00, 0.00, 1, 1, 0, 0, '1899-12-30', 0, '-1-3-7-13-19-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Сдам почасово-посуточно 2-ком. кв. пл. Конституции. Квартира с евроремонтом, с/у в кафеле, горячая вода круглосуточно, на кухне плитка, новая кухонная мебель. В комнате новая 2-х спальная кровать и одноместный диван, бронированная дверь, пластиковые окна, окна выходят на тихий зеленый дворик. Рядом  Макдональс, развлекательный комплекс. Транспортная развязка удобная, центр города</span></p>', 0, 1, 9, 0, '2012-06-08 16:42:39', 0, '0000-00-00 00:00:00', 64, 28, '49.989546', '36.232282', 112.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (12, '1012', '2-комнатная возле м. Университет', '2----_2', 6, 1, 120.00, 'ул. Сумская, 15', 0, 0, '', 0, 2, 65, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">10 мин ходьбы до м. "Университет",во дворе магазин, 5 мин ходьбы до набережной на пляж, кафе и сауны, удобная развязка. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Двухкомнатная, уютная, чистая квартира от хозяйки. Вся бытовая техника, постельные и банные принадлежности, командировочным документы, есть другие варианты! </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Возможно ПОЧАСОВАЯ  аренда цена от 100 грн. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Круглосуточное заселение! Бронирование. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Добро пожаловать, всегда рады!</span></p>', 0, 1, 10, 0, '2012-06-08 16:49:28', 0, '1899-12-30 00:00:00', 64, 28, '49.996515', '36.232853', 122.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (13, '1013', '2-комнатная ул. Ленина', '2---_2', 6, 1, 65.00, 'ул. Ленина 20', 0, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Квартира возле м. Научная. Рядом рынок, Институт Неврологии, Дет. Педиатрич. Больница, институт ПАГ. Вся бытовая техника, кондиционер, ТВ. Постоянным клиентам скидки</span></p>', 4, 1, 11, 0, '2012-06-08 17:05:51', 0, '1899-12-30 00:00:00', 64, 26, '50.012714', '36.232144', 67.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (14, '1015', '2-комнатная пр. Победы', '2---', 6, 1, 60.00, 'Пр. Победы 40', 0, 0, '', 0, 2, 0, 0, 0, 0.00, 0.00, 0.00, 0, 1, 0, 0, '1899-12-30', 0, '', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Уютная двухкомнатная мансарда, расположена в 2-х минутах ходьбы от ст.м. Интернациональная.В квартире, большая гостиная, спальная с двуспальным диваном, санузел совмещен. Кухня полностью укомплектована бытовой техникой и столовыми приборами. Постельные и банные принадлежности прилагаются. Приятного время проведения в Харькове!!!!</span></p>', 0, 1, 12, 0, '2012-06-08 17:14:49', 0, '1899-12-30 00:00:00', 64, 16, '50.04997', '36.192241', 62.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (15, '1021', '', '', 3, 1, 0.00, 'Харьков, ул. Ленина 6', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 0, 6, 0, '2012-07-28 03:05:46', 62, '2012-08-07 11:57:33', 62, 0, '0', '0', 0.00, NULL, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (16, '1022', '', '_2', 6, 1, 0.00, 'пр. Героев Сталинграда 10', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 7, 0, '2012-07-28 03:06:55', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67');
 
 -- 
 -- Вывод данных для таблицы g1525_jea_slogans
@@ -1691,7 +1701,7 @@ INSERT INTO g1525_sections VALUES
 -- Вывод данных для таблицы g1525_session
 --
 INSERT INTO g1525_session VALUES 
-  ('', '1343471957', 'juu8q3293jpe9822ncor31g473', 1, 0, '', 0, 0, '__default|a:8:{s:15:"session.counter";i:1;s:19:"session.timer.start";i:1343471957;s:18:"session.timer.last";i:1343471957;s:17:"session.timer.now";i:1343471957;s:22:"session.client.browser";s:72:"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:1:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":19:{s:2:"id";i:0;s:4:"name";N;s:8:"username";N;s:5:"email";N;s:8:"password";N;s:14:"password_clear";s:0:"";s:8:"usertype";N;s:5:"block";N;s:9:"sendEmail";i:0;s:3:"gid";i:0;s:12:"registerDate";N;s:13:"lastvisitDate";N;s:10:"activation";N;s:6:"params";N;s:3:"aid";i:0;s:5:"guest";i:1;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:63:"C:\\inetpub\\wwwroot\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}}s:13:"session.token";s:32:"697aee394d1aad8a4d1b45fe044c2b7c";}');
+  ('', '1345222728', '1066fa37aa0d75b936071dfee2aa4825', 1, 0, '', 0, 1, '__default|a:8:{s:22:"session.client.browser";s:99:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1";s:15:"session.counter";i:2;s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:1:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":19:{s:2:"id";i:0;s:4:"name";N;s:8:"username";N;s:5:"email";N;s:8:"password";N;s:14:"password_clear";s:0:"";s:8:"usertype";N;s:5:"block";N;s:9:"sendEmail";i:0;s:3:"gid";i:0;s:12:"registerDate";N;s:13:"lastvisitDate";N;s:10:"activation";N;s:6:"params";N;s:3:"aid";i:0;s:5:"guest";i:1;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:81:"C:\\Program Files\\Zend\\Apache2\\htdocs\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}}s:19:"session.timer.start";i:1345222728;s:18:"session.timer.last";i:1345222728;s:17:"session.timer.now";i:1345222728;s:13:"session.token";s:32:"747ab1cb5e25078ed310020a75822908";}');
 
 -- 
 -- Вывод данных для таблицы g1525_stats_agents
@@ -1709,11 +1719,10 @@ INSERT INTO g1525_templates_menu VALUES
 -- Вывод данных для таблицы g1525_users
 --
 INSERT INTO g1525_users VALUES 
-  (62, 'Administrator', 'pterik', 'pterik@gmail.com', '13bcb1bf22079e25e7b0bfe52eaaf2d0:MjeIKJzmqMmCtaCKypcLNeoUero8quiS', 'Super Administrator', 0, 1, 25, '2012-04-24 17:06:27', '2012-07-27 23:04:14', 'e6674b7f98c0de1025b7c4ee8cb82f77:$1$82f15750$', 'admin_language=\nlanguage=\neditor=tinymce\nhelpsite=\ntimezone=2\npage_title=Редактировать ваши данные\nshow_page_title=1\n\n'),
-  (63, 'agent', 'agent', 'b@gmail.com', 'ec0a4afe80d03bc64e3dba3f6de8e8ac:sYw071ySORVLHWm5r8JCrXJJORcckmec', 'Jea Agent', 0, 0, 34, '2012-05-07 15:38:39', '2012-05-08 18:23:42', '', 'language=\ntimezone=0\nadmin_language=\neditor=\nhelpsite=\n\n'),
-  (64, 'agent2', 'agent2', 'a@gmail.com', '841382134201763ecdc4ac339912d498:lnTkNm4UfqnCJRMnPCp4nV6bHgd7K29G', 'Jea Agent', 0, 0, 34, '2012-05-08 18:37:59', '2012-07-24 15:25:23', '', 'page_title=Редактировать ваши данные\nshow_page_title=1\nlanguage=ru-RU\ntimezone=2\nadmin_language=\neditor=\nhelpsite=\n\n'),
-  (65, 'Славик', 'yeti', 'yeti7@i.ua', '1994403ba39aa16aeab3d83c887c2a8b:JRDq5eJXV2Fu4vmsCEFoft5zFnsGhxXb', 'Super Administrator', 0, 1, 25, '2012-05-27 09:00:33', '2012-05-27 09:05:12', '', 'admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=2\n\n'),
-  (67, 'Николай', 'kelyanss', 'kelyanss@gmail.com', '22132afd99afdad1354afad87aceb0b4:0in872JYnbR2Epz8INscKNtx74sdZP6h', 'Super Administrator', 0, 0, 25, '2012-06-07 06:41:03', '2012-06-08 20:36:18', '', 'admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=2\n\n');
+  (62, 'Админ', 'admin', 'yande2000@gmail.com', 'c6a9b2be3b992406746bd2b59c341ede:92NMuMhjIva7lfb01I047pwt6cK904zh', 'Super Administrator', 0, 1, 25, '2012-04-24 17:06:27', '2012-08-17 15:03:42', 'e6674b7f98c0de1025b7c4ee8cb82f77:$1$82f15750$', 'admin_language=\nlanguage=\neditor=tinymce\nhelpsite=\ntimezone=2\npage_title=Редактировать ваши данные\nshow_page_title=1\n\n', '(050)987-654-321', '(050)987-654-322', '(050)987-654-323'),
+  (63, 'agent', 'agent', 'b@gmail.com', '703bda31608edea9bbda97e1ce5431fa:QDFBKpiJOKKkEzRVlDFLTVBJG8JZoN7l', 'Jea Agent', 0, 0, 32, '2012-05-07 15:38:39', '2012-05-08 18:23:42', '', 'language=\ntimezone=0\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-111', '(050)987-654-112', '(050)987-654-113'),
+  (64, 'agent2', 'agent2', 'a@gmail.com', 'd06341290a50ba72d39deab0ed29a6f6:Gcid2ygSXLClodnGq3wETXE6po6n4InD', 'Jea Agent', 0, 0, 32, '2012-05-08 18:37:59', '2012-08-17 14:43:28', '', 'page_title=Редактировать ваши данные\nshow_page_title=1\nlanguage=ru-RU\ntimezone=2\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-211', '(050)987-654-212', '(050)987-654-213'),
+  (67, 'agent3', 'agent3', 'agent3@gmail.com', 'f4cd491d322fee1a3d6ff757c19f9191:JJej7yY2sSw6lVH4mfSJQt2l7nUca52C', 'Jea Agent', 0, 0, 32, '2012-06-07 06:41:03', '2012-06-08 20:36:18', '', 'admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=2\n\n', NULL, NULL, NULL);
 
 -- 
 -- Вывод данных для таблицы g1525_weblinks
@@ -1725,6 +1734,27 @@ INSERT INTO g1525_weblinks VALUES
   (4, 2, 0, 'OpenSourceMatters', 'opensourcematters', 'http://www.opensourcematters.org', 'Home of OSM', '2005-02-14 15:19:02', 11, 1, 0, '0000-00-00 00:00:00', 2, 0, 1, 'target=0'),
   (5, 2, 0, 'Joomla! - Forums', 'joomla-forums', 'http://forum.joomla.org', 'Joomla! Forums', '2005-02-14 15:19:02', 4, 1, 0, '0000-00-00 00:00:00', 4, 0, 1, 'target=0'),
   (6, 2, 0, 'Ohloh Tracking of Joomla!', 'ohloh-tracking-of-joomla', 'http://www.ohloh.net/projects/20', 'Objective reports from Ohloh about Joomla''s development activity. Joomla! has some star developers with serious kudos.', '2007-07-19 09:28:31', 1, 1, 0, '0000-00-00 00:00:00', 6, 0, 1, 'target=0\n\n');
+
+DELIMITER $$
+
+--
+-- Описание для триггера trigger1
+--
+DROP TRIGGER IF EXISTS trigger1$$
+CREATE 
+	DEFINER = 'root'@'localhost'
+TRIGGER trigger1
+	BEFORE UPDATE
+	ON g1525_jea_properties
+	FOR EACH ROW
+BEGIN
+  IF old.is_renting = 0 THEN
+  SET new.is_renting = 1;
+END IF; 
+END
+$$
+
+DELIMITER ;
 
 -- 
 -- Включение внешних ключей
