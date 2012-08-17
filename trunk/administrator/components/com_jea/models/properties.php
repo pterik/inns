@@ -127,7 +127,7 @@ class JeaModelProperties extends JModel
         $order_dir     = $this->_db->getEscaped($mainframe->getUserStateFromRequest( $context.'order_dir', 'filter_order_Dir', 'desc', 'cmd'));
 
         $select = 'SELECT tp.id AS `id`, tp.ref AS `ref`, tp.adress AS `adress`, tp.price AS `price`, tp.price_monthly AS `price_monthly`,' . PHP_EOL
-				. 'concat(tow.telephone1, tow.telephone2, tow.telephone3) AS `phones_owner` , '. PHP_EOL 
+				. 'concat(tp.telephone1, tp.telephone2, tp.telephone3) AS `phones_owner` , '. PHP_EOL 
 				. 'concat(tag.telephone1, tag.telephone2, tag.telephone3) AS `phones_agent` , '. PHP_EOL 
 				. 'tp.date_insert AS `date_insert`,tp.emphasis AS `emphasis`, td.value AS `department`,'. PHP_EOL
          		. 'tt.value AS `type`, tto.value AS `town`, tp.published AS published, tp.ordering AS `ordering`,' . PHP_EOL
@@ -136,7 +136,6 @@ class JeaModelProperties extends JModel
                 . 'FROM #__jea_properties AS tp' . PHP_EOL
                 . 'LEFT JOIN #__jea_departments AS td ON td.id = tp.department_id' . PHP_EOL
          		. 'LEFT JOIN #__jea_agents_v AS tag ON tag.id = tp.agent_id' . PHP_EOL
-				. 'LEFT JOIN #__jea_owners_v AS tow ON tow.id = tp.owner_id' . PHP_EOL
 			    . 'LEFT JOIN #__jea_types AS tt ON tt.id = tp.type_id' . PHP_EOL
 			    . 'LEFT JOIN #__jea_towns AS tto ON tto.id = tp.town_id' . PHP_EOL
 			    . 'LEFT JOIN #__users AS tu ON tu.id = tp.created_by' . PHP_EOL;
