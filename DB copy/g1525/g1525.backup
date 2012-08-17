@@ -9,9 +9,9 @@
   <OutputDirectory>c:\Program Files\Zend\Apache2\htdocs\inns\DB copy\g1525\</OutputDirectory>
   <BaseFileName>g1525</BaseFileName>
   <Mode>All</Mode>
-  <AppendTimestamp>True</AppendTimestamp>
-  <MaxDays>10</MaxDays>
-  <MaxFilesCount>2</MaxFilesCount>
+  <AppendTimestamp>False</AppendTimestamp>
+  <MaxDays>0</MaxDays>
+  <MaxFilesCount>0</MaxFilesCount>
   <Compression />
   <DatabaseObjects />
   <Options>
