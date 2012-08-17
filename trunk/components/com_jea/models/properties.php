@@ -394,9 +394,9 @@ class JeaModelProperties extends JModel
         $select = implode(', ', $temp );
 
         $select .= ', td.value AS `department`, tc.value AS `condition`, ta.value AS `area`, '. PHP_EOL
-			    .  'concat(tow.telephone1, tow.telephone2, tow.telephone3) AS `phones_owner`, '. PHP_EOL 
+			    .  'concat(tp.telephone1, tp.telephone2, tp.telephone3) AS `phones_owner`, '. PHP_EOL 
 			    .  'concat(tag.telephone1, tag.telephone2, tag.telephone3) AS `phones_agent`, '. PHP_EOL 
-			    .  'case when length(tow.telephone1)>0 then tow.telephone1 else tag.telephone1 end as `phone_main`, '. PHP_EOL 
+			    .  'case when length(tp.telephone1)>0 then tp.telephone1 else tag.telephone1 end as `phone_main`, '. PHP_EOL 
 			    .  'ts.value AS `slogan`, tt.value AS `type`, tto.value AS `town`, '. PHP_EOL 
 				.  'thwt.value AS `hot_water`, tht.value AS `heating`'. PHP_EOL;
 		
@@ -410,7 +410,6 @@ class JeaModelProperties extends JModel
 
         return 'SELECT ' . $select  . PHP_EOL. ' FROM #__jea_properties AS tp' . PHP_EOL
 		. 'LEFT JOIN #__jea_agents_v AS tag ON tag.id = tp.agent_id' . PHP_EOL
-		. 'LEFT JOIN #__jea_owners_v AS tow ON tow.id = tp.owner_id' . PHP_EOL
 		. 'LEFT JOIN #__jea_departments AS td ON td.id = tp.department_id' . PHP_EOL
 			 . 'LEFT JOIN #__jea_conditions AS tc ON tc.id = tp.condition_id' . PHP_EOL
 			 . 'LEFT JOIN #__jea_areas AS ta ON ta.id = tp.area_id' . PHP_EOL
