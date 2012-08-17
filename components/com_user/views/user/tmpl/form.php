@@ -37,6 +37,36 @@ defined('_JEXEC') or die('Restricted access'); ?>
 	</td>
 </tr>
 <tr>
+	<td width="120">
+		<label for="telephone1">
+			<?php echo JText::_( 'telephone 1' ); ?>:
+		</label>
+	</td>
+	<td>
+		<input class="inputbox" type="text" id="telephone1" name="telephone1" value="<?php echo $this->escape($this->user->get('telephone1'));?>" size="40" />
+	</td>
+</tr>
+<tr>
+	<td width="120">
+		<label for="telephone2">
+			<?php echo JText::_( 'telephone 2' ); ?>:
+		</label>
+	</td>
+	<td>
+		<input class="inputbox" type="text" id="telephone2" name="telephone2" value="<?php echo $this->escape($this->user->get('telephone2'));?>" size="40" />
+	</td>
+</tr>
+<tr>
+	<td width="120">
+		<label for="telephone3">
+			<?php echo JText::_( 'telephone 3' ); ?>:
+		</label>
+	</td>
+	<td>
+		<input class="inputbox" type="text" id="telephone3" name="telephone3" value="<?php echo $this->escape($this->user->get('telephone3'));?>" size="40" />
+	</td>
+</tr>
+<tr>
 	<td>
 		<label for="email">
 			<?php echo JText::_( 'email' ); ?>:
