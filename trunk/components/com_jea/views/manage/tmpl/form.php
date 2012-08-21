@@ -88,10 +88,6 @@ $document->addScriptDeclaration( '
 function checkForm() {
     var form = document.jeaForm;
     
-    if ( form.ref.value == "" ) {
-        alert( "' . JText::_('Property must have a reference') . '" );
-        return false;
-    };
 	if ( form.type_id.value == "0" ) {
         alert( "' . JText::_('Select a type of property') . '" );
         return false;
@@ -116,8 +112,8 @@ function checkForm() {
         <tr>
           <td nowrap="nowrap"><label for="ref"><?php echo JText::_('Reference') ?> : </label></td>
           <td width="100%">
-            <input id="ref" type="text" name="ref" value="<?php echo $this->escape( $this->row->ref ) ?>" class="inputbox" />
-           
+			<input id="ref" type="hidden" name="ref" value="<?php echo $this->escape( $this->row->ref ) ?>" class="inputbox" />
+            <label for="title"><?php echo $this->escape( $this->row->ref ) ?> </label>
             <!--<?php echo JHTML::_('select.booleanlist',  'is_renting' , 'class="inputbox"' , $this->row->is_renting, 'Renting', 'Selling' ) ; ?>-->
           </td>
         </tr>
@@ -134,7 +130,7 @@ function checkForm() {
           <td width="100%" ><?php echo  $this->getHtmlList('types', $this->row->type_id) ?></td>
         </tr>
         <tr>
-          <td nowrap="nowrap"><label for="zip_code"><?php echo JText::_('TOWN') ?> :</label></td>
+          <td nowrap="nowrap"><label for="zip_code"><?php echo JText::_('Town') ?> :</label></td>
           <td width="100%" >
    		  <?php echo $this->getHtmlList('towns', $this->row->town_id) ?>
           </td>
@@ -150,7 +146,18 @@ function checkForm() {
         
         <tr>
           <td nowrap="nowrap"><?php echo JText::_('Published') ?> : </td>
-          <td><?php echo JHTML::_('select.booleanlist',  'published' , 'class="inputbox"' , $this->row->published ) ; ?></td>
+          <td><?php 
+			if ($this->escape($this->row->published)=='') 
+			{ 
+			echo '<input type="radio" name="published" id="published0" value="0"  class="inputbox"/>';
+			echo '<label for="published0">'.JText::_("No").'</label>';
+			echo '<input type="radio" name="published" id="published1" value="1" checked="checked" class="inputbox"/>';
+			echo '<label for="published1">'.JText::_("Yes").'</label>';
+			} 
+			else 
+			{echo JHTML::_('select.booleanlist',  'published' , 'class="inputbox"' , $this->row->published);}
+		  ?>
+		  </td>
         </tr>
         
         <tr>
