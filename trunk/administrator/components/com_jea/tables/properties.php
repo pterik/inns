@@ -72,12 +72,7 @@ class TableProperties extends JTable
 	
 	function check()
 	{
-	   if( empty( $this->ref ) ) {
-			
-		    $this->setError( JText::_('Property must have a reference') );
-			return false;
-			
-		} elseif ( empty( $this->type_id ) ) {
+	   if ( empty( $this->type_id ) ) {
 		    
 		     $this->setError( JText::_('Select a type of property') );
 			return false;
