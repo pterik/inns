@@ -109,13 +109,15 @@ if($this->params->get('relationship_dpts_towns_area', 0)) {
 function submitbutton( pressbutton, section ) {
 	var form = document.adminForm;
 	if (pressbutton == 'apply' || pressbutton == 'save') {
-		if ( form.ref.value == "" ) {
-			alert( "<?php echo JText::_('Property must have a reference') ?>" );
-			return;
-		} else if ( form.type_id.value == "0" ) {
+		if ( form.type_id.value == "0" ) {
 			alert( "<?php echo JText::_('Select a type of property') ?>" );
 			return;
-		}
+		};
+	    if ( form.town_id.value == "0" ) {
+        alert( "<?php echo JText::_('Select a town') ?>" );
+        return false;
+    };
+
 	}
 
 	$('content-pane').getElements('h3.title').each(function(item, count){
@@ -140,7 +142,8 @@ function submitbutton( pressbutton, section ) {
 		<tr>
 		  <td nowrap="nowrap"><label for="ref"><?php echo JText::_('Reference') ?> : </label></td>
 		  <td width="100%">
-		  	<input id="ref" type="text" name="ref" value="<?php echo $this->escape( $this->row->ref ) ?>" class="inputbox" />
+		  	<input id="ref" type="hidden" name="ref" value="<?php echo $this->escape( $this->row->ref ) ?>" class="inputbox" />
+			<label for="title"><?php echo $this->escape( $this->row->ref ) ?> </label>
 		  </td>
 		</tr>
 		
