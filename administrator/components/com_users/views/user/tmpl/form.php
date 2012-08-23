@@ -233,6 +233,16 @@
 				</tr>
 				<tr>
 					<td class="key">
+						<?php echo JText::_( 'Mobile' ); ?>
+					</td>
+					<td >
+						<strong>
+							<?php echo $this->contact[0]->mobile;?>
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="key">
 						<?php echo JText::_( 'Telephone' ); ?>
 					</td>
 					<td >
