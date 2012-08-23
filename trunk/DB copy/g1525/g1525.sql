@@ -1,6 +1,6 @@
 ﻿-- Скрипт сгенерирован Devart dbForge Studio for MySQL, Версия 5.0.82.1
 -- Домашняя страница продукта: http://www.devart.com/ru/dbforge/mysql/studio
--- Дата скрипта: 17.08.2012 20:44:44
+-- Дата скрипта: 23.08.2012 20:27:16
 -- Версия сервера: 5.5.25a
 -- Версия клиента: 4.1
 
@@ -187,8 +187,8 @@ CREATE TABLE g1525_contact_details (
   INDEX catid (catid)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 4
-AVG_ROW_LENGTH = 5461
+AUTO_INCREMENT = 8
+AVG_ROW_LENGTH = 4096
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -285,8 +285,8 @@ CREATE TABLE g1525_core_acl_aro (
   UNIQUE INDEX g1525_section_value_value_aro (section_value(100), value(100))
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 16
-AVG_ROW_LENGTH = 4096
+AUTO_INCREMENT = 17
+AVG_ROW_LENGTH = 3276
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -356,7 +356,7 @@ CREATE TABLE g1525_core_acl_groups_aro_map (
   UNIQUE INDEX group_id_aro_id_groups_aro_map (group_id, section_value, aro_id)
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 4096
+AVG_ROW_LENGTH = 3276
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -578,8 +578,8 @@ CREATE TABLE g1525_jea_properties (
   INDEX idx_jea_typeid (type_id)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 17
-AVG_ROW_LENGTH = 1638
+AUTO_INCREMENT = 24
+AVG_ROW_LENGTH = 1092
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -958,7 +958,7 @@ CREATE TABLE g1525_session (
   INDEX whosonline (guest, usertype)
 )
 ENGINE = INNODB
-AVG_ROW_LENGTH = 16384
+AVG_ROW_LENGTH = 5461
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -1019,8 +1019,8 @@ CREATE TABLE g1525_users (
   INDEX usertype (usertype)
 )
 ENGINE = INNODB
-AUTO_INCREMENT = 68
-AVG_ROW_LENGTH = 4096
+AUTO_INCREMENT = 69
+AVG_ROW_LENGTH = 3276
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
@@ -1057,33 +1057,64 @@ COLLATE utf8_general_ci;
 DELIMITER $$
 
 --
--- Описание для функции get_sequence
+-- Описание для процедуры insert_contact_details
 --
-DROP FUNCTION IF EXISTS get_sequence$$
-CREATE FUNCTION get_sequence(TABLENAME VARCHAR(255), PARAM1 VARCHAR(255))
-  RETURNS int(11)
+DROP PROCEDURE IF EXISTS insert_contact_details$$
+CREATE PROCEDURE insert_contact_details(IN L_USER_ID INT, IN L_NAME VARCHAR(255), IN L_USERNAME VARCHAR(255), IN L_TELEPHONE1 VARCHAR(255), IN L_TELEPHONE2 VARCHAR(255), IN L_TELEPHONE3 VARCHAR(255))
   SQL SECURITY INVOKER
-  READS SQL DATA
-  COMMENT 'NEXTVAL - в зависимости от таблицы и аргументов возвращать следующее значение ключа'
+  MODIFIES SQL DATA
+  COMMENT 'Обновляет дополнительные для текущего пользователя, если их ещё не было - вставляет'
 BEGIN
-  DECLARE L_max INT(11);
+  DECLARE l_cntr   INTEGER;
+  DECLARE l_params TEXT;
 
-  IF tablename = 'g1525_jea_properties' THEN
-  SELECT max(ref)
+  SET l_params = 
+'show_name=1
+show_position=1
+show_email=0
+show_street_address=1
+show_suburb=1
+show_state=1
+show_postcode=1
+show_country=1
+show_telephone=1
+show_mobile=1
+show_fax=1
+show_webpage=1
+show_misc=1
+show_image=1
+allow_vcard=0
+contact_icons=0
+icon_address=
+icon_email=
+icon_telephone=
+icon_mobile=
+icon_fax=
+icon_misc=
+show_email_form=1
+email_description=
+show_email_copy=1
+banned_email=
+banned_subject=
+banned_text=';
+  SELECT count(*)
   INTO
-    l_max
+    l_cntr
   FROM
-    g1525_jea_properties;
-  IF (l_max IS NULL) OR (L_max = 0) THEN
-    SET l_max = 1;
+    g1525_contact_details d
+  WHERE
+    d.user_id = l_user_id;
+  IF l_cntr > 0
+  THEN
+    UPDATE g1525_contact_details d
+    SET
+      name = l_name, alias = l_username, published =1, 
+      mobile = l_telephone1, telephone = l_telephone2, fax = l_telephone3
+    WHERE
+      d.user_id = l_user_id;
   ELSE
-    SET l_max = l_max + 1;
+    INSERT INTO g1525_contact_details (user_id, name, alias, mobile, telephone, fax, params) VALUES (l_user_id, l_name, l_username, l_telephone1, l_telephone2, l_telephone3, l_params);
   END IF;
-  RETURN L_max;
-END IF;
-
-RETURN 0;  
-
 END
 $$
 
@@ -1215,8 +1246,9 @@ INSERT INTO g1525_components VALUES
 --
 INSERT INTO g1525_contact_details VALUES 
   (1, 'Name', 'name', 'Position', 'Street', 'Suburb', 'State', 'Country', 'Zip Code', 'Telephone', 'Fax', 'Miscellanous info', 'powered_by.png', 'top', 'email@email.com', 1, 1, 0, '0000-00-00 00:00:00', 1, 'show_name=1\r\nshow_position=1\r\nshow_email=0\r\nshow_street_address=1\r\nshow_suburb=1\r\nshow_state=1\r\nshow_postcode=1\r\nshow_country=1\r\nshow_telephone=1\r\nshow_mobile=1\r\nshow_fax=1\r\nshow_webpage=1\r\nshow_misc=1\r\nshow_image=1\r\nallow_vcard=0\r\ncontact_icons=0\r\nicon_address=\r\nicon_email=\r\nicon_telephone=\r\nicon_fax=\r\nicon_misc=\r\nshow_email_form=1\r\nemail_description=1\r\nshow_email_copy=1\r\nbanned_email=\r\nbanned_subject=\r\nbanned_text=', 0, 12, 0, '', ''),
-  (2, 'Сергей', '2012-08-07-13-49-33', '', '', '', '', '', '', '(050)321-45-65', '(063)12-13-14', '', '', NULL, 'sergey@gmail.com', 0, 1, 62, '2012-08-07 13:54:37', 2, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_telephone=1\nshow_mobile=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 63, 12, 1, '(067)123-56-98', 'http://inns.in.ua/sergey'),
-  (3, 'Василий', 'agent2', 'агент', '', 'Харьков', '', '', '', '(050)988-54-32', '(063)987-43-21', '', '', NULL, 'vasily@gmail.com', 0, 1, 0, '0000-00-00 00:00:00', 3, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_telephone=1\nshow_mobile=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 64, 12, 1, '(067)905-23-32', 'http://inns.in.ua/vasily');
+  (3, 'Василий', 'agent2', 'агент', '', 'Харьков', '', '', '', '(050)988-54-32', '(063)987-43-21', '', '', NULL, 'vasily@gmail.com', 0, 1, 62, '2012-08-22 13:46:01', 3, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_telephone=1\nshow_mobile=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 64, 12, 1, '(067)905-23-32', 'http://inns.in.ua/vasily'),
+  (4, 'тестович 6', 'agent4', '', '', '', '', '', '', '222222', '333333', '', 'web_links.jpg', NULL, '', 0, 1, 0, '0000-00-00 00:00:00', 4, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_mobile=1\nshow_telephone=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 68, 12, 0, '1111111', ''),
+  (7, 'agent', 'agent', '', '', '', '', '', '', '8888', '9999', '', '', NULL, '', 0, 1, 0, '0000-00-00 00:00:00', 0, 'show_name=1\nshow_position=1\nshow_email=0\nshow_street_address=1\nshow_suburb=1\nshow_state=1\nshow_postcode=1\nshow_country=1\nshow_mobile=1\nshow_telephone=1\nshow_fax=1\nshow_webpage=1\nshow_misc=1\nshow_image=1\nallow_vcard=0\ncontact_icons=0\nicon_address=\nicon_email=\nicon_telephone=\nicon_mobile=\nicon_fax=\nicon_misc=\nshow_email_form=1\nemail_description=\nshow_email_copy=1\nbanned_email=\nbanned_subject=\nbanned_text=', 63, 12, 0, '77777', '');
 
 -- 
 -- Вывод данных для таблицы g1525_content
@@ -1282,9 +1314,10 @@ INSERT INTO g1525_content VALUES
 --
 INSERT INTO g1525_core_acl_aro VALUES 
   (10, 'users', '62', 0, 'Админ', 0),
-  (11, 'users', '63', 0, 'agent', 0),
-  (12, 'users', '64', 0, 'agent2', 0),
-  (15, 'users', '67', 0, 'agent3', 0);
+  (11, 'users', '63', 0, 'Василий', 0),
+  (12, 'users', '64', 0, 'Василий Сергеевич', 0),
+  (15, 'users', '67', 0, 'agent3', 0),
+  (16, 'users', '68', 0, 'Тестович', 0);
 
 -- 
 -- Вывод данных для таблицы g1525_core_acl_aro_groups
@@ -1325,7 +1358,8 @@ INSERT INTO g1525_core_acl_groups_aro_map VALUES
   (25, '', 10),
   (32, '', 11),
   (32, '', 12),
-  (32, '', 15);
+  (32, '', 15),
+  (32, '', 16);
 
 -- 
 -- Вывод данных для таблицы g1525_core_log_items
@@ -1432,16 +1466,21 @@ INSERT INTO g1525_jea_owners VALUES
 -- Вывод данных для таблицы g1525_jea_properties
 --
 INSERT INTO g1525_jea_properties VALUES 
-  (7, '1006', 'Своя квартира на Павловом поле', '----', 3, 1, 105.00, 'ул. Ленина 20', 4, 0, '', 0, 2, 40, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '2012-07-24', 0, '-1-2-3-4-7-8-9-10-11-12-14-15-16-17-18-19-20-21-22-23-', '<p>Сдам посуточно 1к. кв. студию в 5 мин. от к-тр им. Довженка новый современный ремонт вся бытовая техника класса люкс кондиционер wi-fi уютно 5й этаж 300грн. 066-881-92-45.</p>', 0, 1, 5, 0, '2012-06-08 13:35:19', 0, '0000-00-00 00:00:00', 62, 97, '50.032941', '36.214125', 120.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (7, '1006', 'Своя квартира на Павловом поле', '----', 3, 1, 105.00, 'ул. Ленина 20', 4, 0, '', 0, 2, 40, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '2012-07-24', 0, '-1-2-3-4-7-8-9-10-11-12-14-15-16-17-18-19-20-21-22-23-', '<p>Сдам посуточно 1к. кв. студию в 5 мин. от к-тр им. Довженка новый современный ремонт вся бытовая техника класса люкс кондиционер wi-fi уютно 5й этаж 300грн. 066-881-92-45.</p>', 0, 1, 5, 0, '2012-06-08 13:35:19', 62, '2012-08-21 15:36:23', 62, 97, '50.032941', '36.214125', 120.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
   (8, '1007', '1-комн возле Госпрома', '1---', 3, 1, 80.00, 'пр. Ленина', 4, 0, '', 0, 1, 52, 0, 1, 0.00, 0.00, 0.00, 0, 0, 0, 0, '2012-07-23', 0, '', '<p>Сдам посуточно свою 1 комн. квартиру в центре (рядом с Госпромом), комфортная, вся техника, 150 грн в сутки.</p>', 0, 1, 6, 0, '2012-06-08 13:37:06', 0, '0000-00-00 00:00:00', 62, 113, '50.015485', '36.232671', 0.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
-  (9, '1008', '2-комнатная на Холодной Горе', '2----', 6, 1, 100.00, 'м. Холодная Гора, Полтавский шлях', 4, 0, '', 0, 2, 60, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '1899-12-30', 0, '-1-7-', '<p>М. Хол. гора, своя 1к. кв-ра посуточно, почасово. Отл. ремонт, новый дом, душ. кабина, бойлер, каб-е Тв, DVD, высокоскор-ой Wi-Fi Триолан, новая кровать, холодильник, кондиционер, фен, утюг, посуда, свеж белье. Чеки. 067-812-52-80, 066-314-42-60.</p>', 0, 1, 7, 0, '2012-06-08 13:40:10', 0, '0000-00-00 00:00:00', 62, 30, '49.986371', '36.193156', 102.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (9, '1008', '2-комнатная на Холодной Горе', '2----', 6, 1, 100.00, 'м. Холодная Гора, Полтавский шлях', 4, 0, '', 0, 2, 60, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '1899-12-30', 0, '-1-7-', '<p>М. Хол. гора, своя 1к. кв-ра посуточно, почасово. Отл. ремонт, новый дом, душ. кабина, бойлер, каб-е Тв, DVD, высокоскор-ой Wi-Fi Триолан, новая кровать, холодильник, кондиционер, фен, утюг, посуда, свеж белье. Чеки. 067-812-52-80, 066-314-42-60.</p>', 0, 1, 7, 1, '2012-06-08 13:40:10', 0, '0000-00-00 00:00:00', 62, 30, '49.986371', '36.193156', 102.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
   (10, '1010', 'Василий заплатил за 2 месяца', '---2-', 6, 1, 80.00, 'пр. Героев Труда, 16', 4, 0, '', 0, 3, 25, 0, 0, 0.00, 0.00, 0.00, 1, 1, 0, 0, '2012-07-24', 0, '-1-2-3-4-5-6-7-13-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Однокомнатная квартира, 9/9 этажного дома, рядом со ст. м. Барабашова, общая площадь 30 кв.м, жилая 15 кв.м. Хороший ремонт, новая мебель, сантехника. Холодильник, микроволновая печь, электрочайник, утюг, гладильная доска, телевизор, DVD, кондиционер, интернет (по договоренности), 4 спальных места (2 дивана-книжки), чистая постель, полотенца, тапочки.</span></p>', 0, 1, 8, 0, '2012-06-08 16:25:26', 0, '0000-00-00 00:00:00', 64, 31, '50.000546', '36.300035', 1000.00, 1, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
   (11, '1011', '2-комнатная на пл. Конституции', '2----_2', 6, 1, 110.00, 'пл. Конституции, 7', 4, 0, '', 0, 1, 50, 0, 0, 0.00, 0.00, 0.00, 1, 1, 0, 0, '1899-12-30', 0, '-1-3-7-13-19-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Сдам почасово-посуточно 2-ком. кв. пл. Конституции. Квартира с евроремонтом, с/у в кафеле, горячая вода круглосуточно, на кухне плитка, новая кухонная мебель. В комнате новая 2-х спальная кровать и одноместный диван, бронированная дверь, пластиковые окна, окна выходят на тихий зеленый дворик. Рядом  Макдональс, развлекательный комплекс. Транспортная развязка удобная, центр города</span></p>', 0, 1, 9, 0, '2012-06-08 16:42:39', 0, '0000-00-00 00:00:00', 64, 28, '49.989546', '36.232282', 112.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
-  (12, '1012', '2-комнатная возле м. Университет', '2----_2', 6, 1, 120.00, 'ул. Сумская, 15', 0, 0, '', 0, 2, 65, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">10 мин ходьбы до м. "Университет",во дворе магазин, 5 мин ходьбы до набережной на пляж, кафе и сауны, удобная развязка. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Двухкомнатная, уютная, чистая квартира от хозяйки. Вся бытовая техника, постельные и банные принадлежности, командировочным документы, есть другие варианты! </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Возможно ПОЧАСОВАЯ  аренда цена от 100 грн. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Круглосуточное заселение! Бронирование. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Добро пожаловать, всегда рады!</span></p>', 0, 1, 10, 0, '2012-06-08 16:49:28', 0, '1899-12-30 00:00:00', 64, 28, '49.996515', '36.232853', 122.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
-  (13, '1013', '2-комнатная ул. Ленина', '2---_2', 6, 1, 65.00, 'ул. Ленина 20', 0, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Квартира возле м. Научная. Рядом рынок, Институт Неврологии, Дет. Педиатрич. Больница, институт ПАГ. Вся бытовая техника, кондиционер, ТВ. Постоянным клиентам скидки</span></p>', 4, 1, 11, 0, '2012-06-08 17:05:51', 0, '1899-12-30 00:00:00', 64, 26, '50.012714', '36.232144', 67.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
-  (14, '1015', '2-комнатная пр. Победы', '2---', 6, 1, 60.00, 'Пр. Победы 40', 0, 0, '', 0, 2, 0, 0, 0, 0.00, 0.00, 0.00, 0, 1, 0, 0, '1899-12-30', 0, '', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Уютная двухкомнатная мансарда, расположена в 2-х минутах ходьбы от ст.м. Интернациональная.В квартире, большая гостиная, спальная с двуспальным диваном, санузел совмещен. Кухня полностью укомплектована бытовой техникой и столовыми приборами. Постельные и банные принадлежности прилагаются. Приятного время проведения в Харькове!!!!</span></p>', 0, 1, 12, 0, '2012-06-08 17:14:49', 0, '1899-12-30 00:00:00', 64, 16, '50.04997', '36.192241', 62.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (12, '1012', '2-комнатная возле м. Университет', '2-2_2', 6, 1, 120.00, 'ул. Сумская, 15', 2, 0, '', 0, 2, 65, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">10 мин ходьбы до м. "Университет",во дворе магазин, 5 мин ходьбы до набережной на пляж, кафе и сауны, удобная развязка. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Двухкомнатная, уютная, чистая квартира от хозяйки. Вся бытовая техника, постельные и банные принадлежности, командировочным документы, есть другие варианты! </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Возможно ПОЧАСОВАЯ  аренда цена от 100 грн. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Круглосуточное заселение! Бронирование. </span><br style="margin: 0px; padding: 0px; border: none; color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;" /><span style="color: #434243; font-family: ''Droid Sans'', Tahoma, Geneva, sans-serif; line-height: normal; background-color: #e2f1ff;">Добро пожаловать, всегда рады!</span></p>', 0, 1, 10, 0, '2012-06-08 16:49:28', 0, '0000-00-00 00:00:00', 64, 28, '49.996515', '36.232853', 0.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (13, '1013', '2-комнатная ул. Ленина', '2-2', 6, 1, 65.00, 'ул. Ленина 20', 4, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '1899-12-30', 0, '-3-', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Квартира возле м. Научная. Рядом рынок, Институт Неврологии, Дет. Педиатрич. Больница, институт ПАГ. Вся бытовая техника, кондиционер, ТВ. Постоянным клиентам скидки</span></p>', 4, 1, 11, 0, '2012-06-08 17:05:51', 0, '0000-00-00 00:00:00', 64, 26, '50.012714', '36.232144', 0.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (14, '1015', '2-комнатная пр. Победы', '2-', 6, 1, 60.00, 'Пр. Победы 40', 1, 0, '', 0, 2, 0, 0, 0, 0.00, 0.00, 0.00, 0, 1, 0, 0, '1899-12-30', 0, '', '<p><span style="color: #434243; font-family: Tahoma, sans-serif; line-height: normal; background-color: #fffaf0;">Уютная двухкомнатная мансарда, расположена в 2-х минутах ходьбы от ст.м. Интернациональная.В квартире, большая гостиная, спальная с двуспальным диваном, санузел совмещен. Кухня полностью укомплектована бытовой техникой и столовыми приборами. Постельные и банные принадлежности прилагаются. Приятного время проведения в Харькове!!!!</span></p>', 0, 1, 12, 0, '2012-06-08 17:14:49', 0, '0000-00-00 00:00:00', 64, 16, '50.04997', '36.192241', 0.00, 2, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
   (15, '1021', '', '', 3, 1, 0.00, 'Харьков, ул. Ленина 6', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 0, 6, 0, '2012-07-28 03:05:46', 62, '2012-08-07 11:57:33', 62, 0, '0', '0', 0.00, NULL, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
-  (16, '1022', '', '_2', 6, 1, 0.00, 'пр. Героев Сталинграда 10', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 7, 0, '2012-07-28 03:06:55', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67');
+  (16, '1022', '', '2', 6, 1, 0.00, 'пр. Героев Сталинграда 10', 4, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 7, 0, '2012-07-28 03:06:55', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, 0, '(067)1234-45-67', '(050)1234-45-67', '(093)1234-45-67'),
+  (18, '1023', 'Привет мир', '-', 6, 1, 100.00, 'ул. Межигорская 2', 1, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '-1-', '<p>Хорошая такая квартира</p>', 0, 1, 1, 0, '2012-08-21 17:54:02', 0, '0000-00-00 00:00:00', 64, 0, '50.465524', '30.518137', 2000.00, NULL, 0, NULL, NULL, NULL),
+  (20, '1024', 'Здравствуй мир 3', '--3', 8, 1, 200.00, 'ул. Мира 14', 3, 0, '', 0, 1, 0, 0, 0, 0.00, 0.00, 0.00, 1, 0, 0, 0, '0000-00-00', 0, '-1-7-', '<p>Суперхата рекомендую всем</p>', 0, 1, 1, 0, '2012-08-21 18:08:04', 0, '0000-00-00 00:00:00', 64, 0, '48.0171935', '37.8091808', 4000.00, NULL, 0, NULL, NULL, NULL),
+  (21, '1025', 'Здравствуй мир 4', '-4', 8, 1, 250.00, 'ул. Мира 22', 3, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '-11-', '<p>Привет</p>', 0, 1, 13, 0, '2012-08-21 18:37:25', 62, '2012-08-21 15:39:40', 62, 0, '0', '0', 0.00, NULL, 0, NULL, NULL, NULL),
+  (22, '1026', 'Здравствуй мир 5', '-5', 3, 1, 0.00, '', 1, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 14, 0, '2012-08-21 18:40:15', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, 0, NULL, NULL, NULL),
+  (23, '1027', '', '_2', 3, 1, 0.00, '', 2, 0, '', 0, 0, 0, 0, 0, 0.00, 0.00, 0.00, 0, 0, 0, 0, '0000-00-00', 0, '', '', 0, 1, 15, 0, '2012-08-21 18:42:21', 0, '0000-00-00 00:00:00', 62, 0, '0', '0', 0.00, NULL, 0, NULL, NULL, NULL);
 
 -- 
 -- Вывод данных для таблицы g1525_jea_slogans
@@ -1701,7 +1740,9 @@ INSERT INTO g1525_sections VALUES
 -- Вывод данных для таблицы g1525_session
 --
 INSERT INTO g1525_session VALUES 
-  ('', '1345222728', '1066fa37aa0d75b936071dfee2aa4825', 1, 0, '', 0, 1, '__default|a:8:{s:22:"session.client.browser";s:99:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1";s:15:"session.counter";i:2;s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:1:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":19:{s:2:"id";i:0;s:4:"name";N;s:8:"username";N;s:5:"email";N;s:8:"password";N;s:14:"password_clear";s:0:"";s:8:"usertype";N;s:5:"block";N;s:9:"sendEmail";i:0;s:3:"gid";i:0;s:12:"registerDate";N;s:13:"lastvisitDate";N;s:10:"activation";N;s:6:"params";N;s:3:"aid";i:0;s:5:"guest";i:1;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:81:"C:\\Program Files\\Zend\\Apache2\\htdocs\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}}s:19:"session.timer.start";i:1345222728;s:18:"session.timer.last";i:1345222728;s:17:"session.timer.now";i:1345222728;s:13:"session.token";s:32:"747ab1cb5e25078ed310020a75822908";}');
+  ('admin', '1345729397', 'g103h6a7jm7asfst5u2famtig4', 0, 62, 'Super Administrator', 25, 1, '__default|a:8:{s:15:"session.counter";i:43;s:19:"session.timer.start";i:1345727846;s:18:"session.timer.last";i:1345729396;s:17:"session.timer.now";i:1345729397;s:22:"session.client.browser";s:99:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1";s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:3:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}s:11:"application";a:1:{s:4:"data";O:8:"stdClass":1:{s:4:"lang";s:0:"";}}s:10:"com_cpanel";a:1:{s:4:"data";O:8:"stdClass":1:{s:9:"mtupgrade";O:8:"stdClass":1:{s:7:"checked";b:1;}}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":19:{s:2:"id";s:2:"62";s:4:"name";s:10:"Админ";s:8:"username";s:5:"admin";s:5:"email";s:19:"yande2000@gmail.com";s:8:"password";s:65:"c6a9b2be3b992406746bd2b59c341ede:92NMuMhjIva7lfb01I047pwt6cK904zh";s:14:"password_clear";s:0:"";s:8:"usertype";s:19:"Super Administrator";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"1";s:3:"gid";s:2:"25";s:12:"registerDate";s:19:"2012-04-24 17:06:27";s:13:"lastvisitDate";s:19:"2012-08-23 13:17:25";s:10:"activation";s:45:"e6674b7f98c0de1025b7c4ee8cb82f77:$1$82f15750$";s:6:"params";s:141:"admin_language=\nlanguage=\neditor=tinymce\nhelpsite=\ntimezone=2\npage_title=Редактировать ваши данные\nshow_page_title=1\n\n";s:3:"aid";i:2;s:5:"guest";i:0;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:81:"C:\\Program Files\\Zend\\Apache2\\htdocs\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":7:{s:14:"admin_language";s:0:"";s:8:"language";s:0:"";s:6:"editor";s:7:"tinymce";s:8:"helpsite";s:0:"";s:8:"timezone";s:1:"2";s:10:"page_title";s:48:"Редактировать ваши данные";s:15:"show_page_title";s:1:"1";}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}}s:13:"session.token";s:32:"63a6ead5221f38f1ae012887e414f0ef";}'),
+  ('', '1345729408', 'lg2mmbbc5nrcjerqn9mb519ol0', 1, 0, '', 0, 0, '__default|a:8:{s:15:"session.counter";i:5;s:19:"session.timer.start";i:1345729275;s:18:"session.timer.last";i:1345729357;s:17:"session.timer.now";i:1345729364;s:22:"session.client.browser";s:99:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1";s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:1:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":19:{s:2:"id";i:0;s:4:"name";N;s:8:"username";N;s:5:"email";N;s:8:"password";N;s:14:"password_clear";s:0:"";s:8:"usertype";N;s:5:"block";N;s:9:"sendEmail";i:0;s:3:"gid";i:0;s:12:"registerDate";N;s:13:"lastvisitDate";N;s:10:"activation";N;s:6:"params";N;s:3:"aid";i:0;s:5:"guest";i:1;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:81:"C:\\Program Files\\Zend\\Apache2\\htdocs\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}}s:13:"session.token";s:32:"45b4ecab6b85f229eb923c9340079d03";}'),
+  ('agent', '1345729465', 's7ekp375m1okt7qhf6a8te7va0', 0, 63, 'Jea Agent', 32, 0, '__default|a:8:{s:15:"session.counter";i:11;s:19:"session.timer.start";i:1345729275;s:18:"session.timer.last";i:1345729430;s:17:"session.timer.now";i:1345729465;s:22:"session.client.browser";s:99:"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1";s:8:"registry";O:9:"JRegistry":3:{s:17:"_defaultNameSpace";s:7:"session";s:9:"_registry";a:1:{s:7:"session";a:1:{s:4:"data";O:8:"stdClass":0:{}}}s:7:"_errors";a:0:{}}s:4:"user";O:5:"JUser":26:{s:2:"id";i:63;s:4:"name";s:14:"Василий";s:8:"username";s:5:"agent";s:5:"email";s:11:"b@gmail.com";s:8:"password";s:65:"e977fb4bda02c6f6531d67c1af8de4f1:tnBAVUU72WlhsO35vMNPxf42jKQ31jcu";s:14:"password_clear";s:0:"";s:8:"usertype";s:9:"Jea Agent";s:5:"block";s:1:"0";s:9:"sendEmail";s:1:"0";s:3:"gid";s:2:"32";s:12:"registerDate";s:19:"2012-05-07 15:38:39";s:13:"lastvisitDate";s:19:"2012-05-08 18:23:42";s:10:"activation";s:0:"";s:6:"params";s:56:"language=\ntimezone=0\nadmin_language=\neditor=\nhelpsite=\n\n";s:3:"aid";i:2;s:5:"guest";i:0;s:7:"_params";O:10:"JParameter":7:{s:4:"_raw";s:0:"";s:4:"_xml";N;s:9:"_elements";a:0:{}s:12:"_elementPath";a:1:{i:0;s:81:"C:\\Program Files\\Zend\\Apache2\\htdocs\\inns\\libraries\\joomla\\html\\parameter\\element";}s:17:"_defaultNameSpace";s:8:"_default";s:9:"_registry";a:1:{s:8:"_default";a:1:{s:4:"data";O:8:"stdClass":5:{s:8:"language";s:0:"";s:8:"timezone";s:1:"0";s:14:"admin_language";s:0:"";s:6:"editor";s:0:"";s:8:"helpsite";s:0:"";}}}s:7:"_errors";a:0:{}}s:9:"_errorMsg";N;s:7:"_errors";a:0:{}s:10:"telephone1";s:0:"";s:10:"telephone2";s:0:"";s:10:"telephone3";s:0:"";s:9:"password2";s:0:"";s:6:"option";s:8:"com_user";s:4:"task";s:4:"save";s:32:"874f95134917e567393a7562b79188ac";s:1:"1";}s:13:"session.token";s:32:"45b4ecab6b85f229eb923c9340079d03";}');
 
 -- 
 -- Вывод данных для таблицы g1525_stats_agents
@@ -1719,10 +1760,11 @@ INSERT INTO g1525_templates_menu VALUES
 -- Вывод данных для таблицы g1525_users
 --
 INSERT INTO g1525_users VALUES 
-  (62, 'Админ', 'admin', 'yande2000@gmail.com', 'c6a9b2be3b992406746bd2b59c341ede:92NMuMhjIva7lfb01I047pwt6cK904zh', 'Super Administrator', 0, 1, 25, '2012-04-24 17:06:27', '2012-08-17 15:03:42', 'e6674b7f98c0de1025b7c4ee8cb82f77:$1$82f15750$', 'admin_language=\nlanguage=\neditor=tinymce\nhelpsite=\ntimezone=2\npage_title=Редактировать ваши данные\nshow_page_title=1\n\n', '(050)987-654-321', '(050)987-654-322', '(050)987-654-323'),
-  (63, 'agent', 'agent', 'b@gmail.com', '703bda31608edea9bbda97e1ce5431fa:QDFBKpiJOKKkEzRVlDFLTVBJG8JZoN7l', 'Jea Agent', 0, 0, 32, '2012-05-07 15:38:39', '2012-05-08 18:23:42', '', 'language=\ntimezone=0\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-111', '(050)987-654-112', '(050)987-654-113'),
-  (64, 'agent2', 'agent2', 'a@gmail.com', 'd06341290a50ba72d39deab0ed29a6f6:Gcid2ygSXLClodnGq3wETXE6po6n4InD', 'Jea Agent', 0, 0, 32, '2012-05-08 18:37:59', '2012-08-17 14:43:28', '', 'page_title=Редактировать ваши данные\nshow_page_title=1\nlanguage=ru-RU\ntimezone=2\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-211', '(050)987-654-212', '(050)987-654-213'),
-  (67, 'agent3', 'agent3', 'agent3@gmail.com', 'f4cd491d322fee1a3d6ff757c19f9191:JJej7yY2sSw6lVH4mfSJQt2l7nUca52C', 'Jea Agent', 0, 0, 32, '2012-06-07 06:41:03', '2012-06-08 20:36:18', '', 'admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=2\n\n', NULL, NULL, NULL);
+  (62, 'Админ', 'admin', 'yande2000@gmail.com', 'c6a9b2be3b992406746bd2b59c341ede:92NMuMhjIva7lfb01I047pwt6cK904zh', 'Super Administrator', 0, 1, 25, '2012-04-24 17:06:27', '2012-08-23 13:17:37', 'e6674b7f98c0de1025b7c4ee8cb82f77:$1$82f15750$', 'admin_language=\nlanguage=\neditor=tinymce\nhelpsite=\ntimezone=2\npage_title=Редактировать ваши данные\nshow_page_title=1\n\n', '(050)987-654-321', '(050)987-654-322', '(050)987-654-323'),
+  (63, 'Василий', 'agent', 'b@gmail.com', 'e977fb4bda02c6f6531d67c1af8de4f1:tnBAVUU72WlhsO35vMNPxf42jKQ31jcu', 'Jea Agent', 0, 0, 32, '2012-05-07 15:38:39', '2012-05-08 18:23:42', '', 'language=\ntimezone=0\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-111', '(050)987-654-112', '(050)987-654-113'),
+  (64, 'Василий Сергеевич', 'agent2', 'a@gmail.com', 'd06341290a50ba72d39deab0ed29a6f6:Gcid2ygSXLClodnGq3wETXE6po6n4InD', 'Jea Agent', 0, 0, 32, '2012-05-08 18:37:59', '2012-08-23 13:41:15', '', 'page_title=Редактировать ваши данные\nshow_page_title=1\nlanguage=ru-RU\ntimezone=2\nadmin_language=\neditor=\nhelpsite=\n\n', '(050)987-654-211', '(050)987-654-212', '(050)987-654-213'),
+  (67, 'agent3', 'agent3', 'agent3@gmail.com', 'f4cd491d322fee1a3d6ff757c19f9191:JJej7yY2sSw6lVH4mfSJQt2l7nUca52C', 'Jea Agent', 0, 0, 32, '2012-06-07 06:41:03', '2012-06-08 20:36:18', '', 'admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=2\n\n', NULL, NULL, NULL),
+  (68, 'Тестович', 'agent4', 'testov@gmail.com', 'a15f688f37c245f85cc83b0e9c2aeb1f:2mDU3rvF4fAcm5HHpY3NNyt75TNxMg9C', 'Jea Agent', 0, 0, 32, '2012-08-22 16:24:52', '0000-00-00 00:00:00', '', 'admin_language=ru-RU\nlanguage=ru-RU\neditor=tinymce\nhelpsite=\ntimezone=2\n\n', NULL, NULL, NULL);
 
 -- 
 -- Вывод данных для таблицы g1525_weblinks
@@ -1738,19 +1780,44 @@ INSERT INTO g1525_weblinks VALUES
 DELIMITER $$
 
 --
--- Описание для триггера trigger1
+-- Описание для триггера jea_properties_BI_trg
 --
-DROP TRIGGER IF EXISTS trigger1$$
+DROP TRIGGER IF EXISTS jea_properties_BI_trg$$
 CREATE 
 	DEFINER = 'root'@'localhost'
-TRIGGER trigger1
+TRIGGER jea_properties_BI_trg
+	BEFORE INSERT
+	ON g1525_jea_properties
+	FOR EACH ROW
+BEGIN
+  declare n_ref integer;
+SELECT max(ref)
+INTO
+  n_ref
+FROM
+  g1525_jea_properties p
+WHERE
+  p.id != new.id;
+SET new.ref = n_ref+1;
+  
+END
+$$
+
+--
+-- Описание для триггера jea_properties_BI_trg2
+--
+DROP TRIGGER IF EXISTS jea_properties_BI_trg2$$
+CREATE 
+	DEFINER = 'root'@'localhost'
+TRIGGER jea_properties_BI_trg2
 	BEFORE UPDATE
 	ON g1525_jea_properties
 	FOR EACH ROW
 BEGIN
   IF old.is_renting = 0 THEN
-  SET new.is_renting = 1;
-END IF; 
+    SET new.is_renting = 1;
+  END IF;
+
 END
 $$
 
