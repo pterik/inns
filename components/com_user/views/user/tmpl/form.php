@@ -38,32 +38,32 @@ defined('_JEXEC') or die('Restricted access'); ?>
 </tr>
 <tr>
 	<td width="120">
-		<label for="telephone1">
-			<?php echo JText::_( 'telephone 1' ); ?>:
+		<label for="mobile">
+			<?php echo JText::_( 'Mobile' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone1" name="telephone1" value="<?php echo $this->escape($this->user->get('telephone1'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone1" name="telephone1" value="<?php echo $this->escape($this->user->get('mobile'));?>" size="40" />
 	</td>
 </tr>
 <tr>
 	<td width="120">
-		<label for="telephone2">
-			<?php echo JText::_( 'telephone 2' ); ?>:
+		<label for="telephone">
+			<?php echo JText::_( 'Telephone' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone2" name="telephone2" value="<?php echo $this->escape($this->user->get('telephone2'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone2" name="telephone2" value="<?php echo $this->escape($this->user->get('telephone'));?>" size="40" />
 	</td>
 </tr>
 <tr>
 	<td width="120">
-		<label for="telephone3">
-			<?php echo JText::_( 'telephone 3' ); ?>:
+		<label for="fax">
+			<?php echo JText::_( 'fax' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone3" name="telephone3" value="<?php echo $this->escape($this->user->get('telephone3'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone3" name="telephone3" value="<?php echo $this->escape($this->user->get('fax'));?>" size="40" />
 	</td>
 </tr>
 <tr>
@@ -101,7 +101,6 @@ defined('_JEXEC') or die('Restricted access'); ?>
 </table>
 <?php if(isset($this->params)) :  echo $this->params->render( 'params' ); endif; ?>
 	<button class="button validate" type="submit" onclick="submitbutton( this.form );return false;"><?php echo JText::_('Save'); ?></button>
-
 	<input type="hidden" name="username" value="<?php echo $this->user->get('username');?>" />
 	<input type="hidden" name="id" value="<?php echo $this->user->get('id');?>" />
 	<input type="hidden" name="gid" value="<?php echo $this->user->get('gid');?>" />
