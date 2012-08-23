@@ -42,11 +42,11 @@
 			<option value="0">Hide</option>
 			<option value="1">Show</option>
 		</param>
-		<param name="show_telephone" type="radio" default="1" label="Telephone" description="Show/Hide the telephone info">
+		<param name="show_mobile" type="radio" default="1" label="Mobile" description="Show/Hide the mobile info">
 			<option value="0">Hide</option>
 			<option value="1">Show</option>
 		</param>
-		<param name="show_mobile" type="radio" default="1" label="Mobile" description="Show/Hide the mobile info">
+		<param name="show_telephone" type="radio" default="1" label="Telephone" description="Show/Hide the telephone info">
 			<option value="0">Hide</option>
 			<option value="1">Show</option>
 		</param>
