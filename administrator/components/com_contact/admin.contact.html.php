@@ -372,16 +372,6 @@ class HTML_contact
 				</tr>
 				<tr>
 					<td class="key" valign="top">
-					<label for="telephone">
-					<?php echo JText::_( 'Telephone' ); ?>:
-						</label>
-					</td>
-					<td>
-						<input class="inputbox" type="text" name="telephone" id="telephone" size="60" maxlength="255" value="<?php echo $row->telephone; ?>" />
-  					</td>
-				</tr>
-				<tr>
-					<td class="key" valign="top">
 						<label for="mobile">
 							<?php echo JText::_( 'Mobile' ); ?>:
 						</label>
@@ -389,6 +379,16 @@ class HTML_contact
 					<td>
  						<input class="inputbox" type="text" name="mobile" id="mobile" size="60" maxlength="255" value="<?php echo $row->mobile; ?>" />
 					</td>
+				</tr>
+				<tr>
+					<td class="key" valign="top">
+					<label for="telephone">
+					<?php echo JText::_( 'Telephone' ); ?>:
+						</label>
+					</td>
+					<td>
+						<input class="inputbox" type="text" name="telephone" id="telephone" size="60" maxlength="255" value="<?php echo $row->telephone; ?>" />
+  					</td>
 				</tr>
 				<tr>
 					<td class="key" valign="top">
