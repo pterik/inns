@@ -38,32 +38,32 @@ defined('_JEXEC') or die('Restricted access'); ?>
 </tr>
 <tr>
 	<td width="120">
-		<label for="mobile">
-			<?php echo JText::_( 'Mobile' ); ?>:
+		<label for="telephone1">
+			<?php echo JText::_( 'Telephone1' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone1" name="telephone1" value="<?php echo $this->escape($this->user->get('mobile'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone1" name="telephone1" value="<?php echo $this->escape($this->user->get('telephone1'));?>" size="40" />
 	</td>
 </tr>
 <tr>
 	<td width="120">
-		<label for="telephone">
-			<?php echo JText::_( 'Telephone' ); ?>:
+		<label for="telephone2">
+			<?php echo JText::_( 'Telephone2' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone2" name="telephone2" value="<?php echo $this->escape($this->user->get('telephone'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone2" name="telephone2" value="<?php echo $this->escape($this->user->get('telephone2'));?>" size="40" />
 	</td>
 </tr>
 <tr>
 	<td width="120">
-		<label for="fax">
-			<?php echo JText::_( 'fax' ); ?>:
+		<label for="telephone3">
+			<?php echo JText::_( 'telephone3' ); ?>:
 		</label>
 	</td>
 	<td>
-		<input class="inputbox" type="text" id="telephone3" name="telephone3" value="<?php echo $this->escape($this->user->get('fax'));?>" size="40" />
+		<input class="inputbox" type="text" id="telephone3" name="telephone3" value="<?php echo $this->escape($this->user->get('telephone3'));?>" size="40" />
 	</td>
 </tr>
 <tr>
