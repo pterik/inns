@@ -95,8 +95,7 @@ class JeaViewFeatures extends JView
 			'heatingtypes'  => 'Heating types List' ,
 	        'hotwatertypes' => 'Hot water types List',
 			'slogans'       => 'Slogans list',
-			'agents'        => 'Agents list'
-			'owners'       => 'Owners list'
+			'owners'        => 'Owners list'
 		);	
 			
 		$this->assign( $items );
