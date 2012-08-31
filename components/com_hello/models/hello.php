@@ -27,6 +27,12 @@ class HelloModelHello extends JModel
 	 */
 	function getGreeting()
 	{
-		return 'Hello, World!';
+		$db =& JFactory::getDBO();
+
+		$query = 'SELECT greeting FROM #__hello';
+		$db->setQuery( $query );
+		$greeting = $db->loadResult();
+
+		return $greeting;
 	}
 }
