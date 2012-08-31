@@ -4,12 +4,12 @@
  * 
  * @package    Joomla.Tutorials
  * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:modules/
- * @license    GNU/GPL
+ * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
+ * @license		GNU/GPL
  */
 
-// No direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+// Check to ensure this file is included in Joomla!
+defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 

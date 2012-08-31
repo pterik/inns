@@ -1,30 +1,29 @@
 <?php
 /**
+ * Hello View for Hello World Component
+ * 
  * @package    Joomla.Tutorials
  * @subpackage Components
- * @link http://docs.joomla.org/Developing_a_Model-View-Controller_Component_-_Part_2
- * @license    GNU/GPL
-	*/
-
-// No direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+ * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
+ * @license		GNU/GPL
+ */
 
 jimport( 'joomla.application.component.view');
 
 /**
  * HTML View class for the HelloWorld Component
  *
- * @package    HelloWorld
+ * @package		Joomla.Tutorials
+ * @subpackage	Components
  */
-
 class HelloViewHello extends JView
 {
 	function display($tpl = null)
 	{
-		$model =& $this->getModel();
-		$greeting = $model->getGreeting();
+		$greeting = $this->get( 'Greeting' );
 		$this->assignRef( 'greeting',	$greeting );
 
 		parent::display($tpl);
 	}
 }
+?>
