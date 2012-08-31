@@ -9,25 +9,21 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>3.01</version>
+	<version>4.01</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>Description of the component ...</description>
 
 	<!-- Site Main File Copy Section -->
-	<!-- Note the folder attribute: This attribute describes the folder
-  	   to copy FROM in the package to install therefore files copied
-    	 in this section are copied from /site/ in the package -->
 	<files folder="site">
 		<filename>controller.php</filename>
 		<filename>hello.php</filename>
 		<filename>index.html</filename>
 		<filename>models/hello.php</filename>
-		<filename>models/index.html</filename>
-		<filename>views/index.html</filename>
 		<filename>views/hello/index.html</filename>
 		<filename>views/hello/view.html.php</filename>
-		<filename>views/hello/tmpl/default.php</filename>
 		<filename>views/hello/tmpl/index.html</filename>
+		<filename>views/hello/tmpl/default.php</filename>
+		<filename>views/index.html</filename>
 	</files>
 
 	<install>
@@ -39,18 +35,38 @@
 		<sql>
 			<file charset="utf8" driver="mysql">uninstall.sql</file>
 		</sql>
-	</uninstall>
+	</uninstall>	
 
 	<administration>
 		<!-- Administration Menu Section -->
 		<menu>Hello World!</menu>
-
+		
 		<!-- Administration Main File Copy Section -->
+		<!-- Note the folder attribute: This attribute describes the folder
+			to copy FROM in the package to install therefore files copied
+			in this section are copied from /admin/ in the package -->
 		<files folder="admin">
+			<!-- Site Main File Copy Section -->
 			<filename>hello.php</filename>
 			<filename>index.html</filename>
 			<filename>install.sql</filename>
 			<filename>uninstall.sql</filename>
-		</files>  
+			<filename>controller.php</filename>
+			<filename>controllers/hello.php</filename>
+			<filename>controllers/index.html</filename>
+			<filename>models/hellos.php</filename>
+			<filename>models/hello.php</filename>
+			<filename>models/index.html</filename>
+			<filename>tables/hello.php</filename>
+			<filename>tables/index.html</filename>
+			<filename>views/hello/view.html.php</filename>
+			<filename>views/hello/tmpl/form.php</filename>
+			<filename>views/hello/index.html</filename>
+			<filename>views/hello/tmpl/index.html</filename>
+			<filename>views/hellos/view.html.php</filename>
+			<filename>views/hellos/index.html</filename>
+			<filename>views/hellos/tmpl/default.php</filename>
+			<filename>views/hellos/tmpl/index.html</filename>
+		</files>		
 	</administration>
 </install>
