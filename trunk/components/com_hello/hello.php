@@ -3,7 +3,7 @@
  * @package    Joomla.Tutorials
  * @subpackage Components
  * components/com_hello/hello.php
- * @link http://docs.joomla.org/Developing_a_Model-View-Controller_Component_-_Part_2
+ * @link http://docs.joomla.org/Developing_a_Model-View-Controller_Component_-_Part_1#Creating_the_Entry_Point
  * @license    GNU/GPL
  */
 
